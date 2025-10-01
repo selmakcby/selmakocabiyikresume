@@ -9,6 +9,7 @@ export async function GET(request: NextRequest) {
     ollamaUrlExists: !!process.env.OLLAMA_URL,
     openaiKeyExists: !!process.env.OPENAI_API_KEY,
     environment: process.env.NODE_ENV,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    version: '1.1.0'
   });
 }

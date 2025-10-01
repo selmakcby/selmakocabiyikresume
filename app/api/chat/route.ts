@@ -113,8 +113,13 @@ export async function POST(request: NextRequest) {
       response,
       debug: {
         userType,
+        groqKeyExists: !!process.env.GROQ_API_KEY,
+        groqKeyPrefix: process.env.GROQ_API_KEY?.substring(0, 10) + '...',
         hfKeyExists: !!process.env.HUGGINGFACE_API_KEY,
-        responseLength: response.length
+        ollamaUrlExists: !!process.env.OLLAMA_URL,
+        openaiKeyExists: !!process.env.OPENAI_API_KEY,
+        responseLength: response.length,
+        timestamp: new Date().toISOString()
       }
     });
     
@@ -129,12 +134,16 @@ export async function POST(request: NextRequest) {
 
 async function generateResponse(message: string, userType: string): Promise<string> {
   // Try different LLM services in order of preference (cheapest first)
+  console.log('🔄 Starting LLM response generation...');
   
   // 1. Try Ollama (local/self-hosted - free)
+  console.log('🔍 Checking Ollama...');
   try {
-    return await generateOllamaResponse(message, userType);
+    const result = await generateOllamaResponse(message, userType);
+    console.log('✅ Ollama success, returning result');
+    return result;
   } catch (error) {
-    console.error('Ollama error:', error);
+    console.error('❌ Ollama error:', error);
   }
   
   // 2. Try Groq API (fast and reliable)
