@@ -280,6 +280,10 @@ async function generateHuggingFaceResponse(message: string, userType: string, ap
   console.log(`🤖 Calling Hugging Face model: ${model}`);
   
   try {
+    // Create AbortController for timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+    
     const response = await fetch(`https://api-inference.huggingface.co/models/${model}`, {
       method: 'POST',
       headers: {
@@ -289,16 +293,20 @@ async function generateHuggingFaceResponse(message: string, userType: string, ap
       body: JSON.stringify({
         inputs: contextPrompt,
         parameters: {
-          max_new_tokens: 150,
+          max_new_tokens: 100,
           temperature: 0.7,
           return_full_text: false,
           do_sample: true,
         },
         options: {
           wait_for_model: true,
+          use_cache: true,
         }
       }),
+      signal: controller.signal,
     });
+    
+    clearTimeout(timeoutId);
 
     console.log(`📡 Hugging Face response status: ${response.status}`);
 
@@ -327,6 +335,10 @@ async function generateHuggingFaceResponse(message: string, userType: string, ap
     throw new Error('Unexpected response format from Hugging Face');
     
   } catch (error) {
+    if (error.name === 'AbortError') {
+      console.error(`⏰ Hugging Face timeout after 10 seconds`);
+      throw new Error('Hugging Face API timeout');
+    }
     console.error(`❌ Hugging Face exception:`, error);
     throw error;
   }
