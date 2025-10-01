@@ -138,6 +138,7 @@ async function generateResponse(message: string, userType: string): Promise<stri
   
   // 1. Try Ollama (local/self-hosted - free)
   console.log('🔍 Checking Ollama...');
+  console.log('Ollama URL exists:', !!process.env.OLLAMA_URL);
   try {
     const result = await generateOllamaResponse(message, userType);
     console.log('✅ Ollama success, returning result');
@@ -187,6 +188,7 @@ async function generateResponse(message: string, userType: string): Promise<stri
   }
   
   // 4. Fallback to rule-based responses (always works)
+  console.log('⚠️ All LLM services failed, falling back to rule-based response');
   return generateRuleBasedResponse(message, userType);
 }
 
@@ -263,6 +265,8 @@ async function generateOllamaResponse(message: string, userType: string): Promis
       const data = await response.json();
       return data.message?.content || 'Sorry, I had trouble generating a response.';
     }
+    
+    console.log(`⚠️ Ollama /api/chat failed with status: ${response.status}`);
     
     // If /api/chat fails, try the older /api/generate endpoint
     const generateResponse = await fetch(`${ollamaUrl}/api/generate`, {
