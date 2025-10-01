@@ -1,6 +1,6 @@
 'use client';
 
-import InlineChatBot from '../components/InlineChatBot';
+import FloatingChatBubble from '../components/FloatingChatBubble';
 
 export default function Motivation() {
 
@@ -69,8 +69,8 @@ export default function Motivation() {
 
     </main>
 
-    {/* Inline ChatBot */}
-    <InlineChatBot 
+    {/* Floating Chat Bubble */}
+    <FloatingChatBubble 
       pageContext="Motivation Letter and Career Goals"
       pageSpecificQuestions={[
         "What drives her passion for AI and data engineering?",

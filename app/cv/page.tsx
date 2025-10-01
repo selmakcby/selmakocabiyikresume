@@ -1,6 +1,6 @@
 'use client';
 
-import InlineChatBot from '../components/InlineChatBot';
+import FloatingChatBubble from '../components/FloatingChatBubble';
 
 export default function CV() {
 
@@ -270,8 +270,8 @@ export default function CV() {
 
     </main>
 
-    {/* Inline ChatBot */}
-    <InlineChatBot 
+    {/* Floating Chat Bubble */}
+    <FloatingChatBubble 
       pageContext="CV and Professional Experience"
       pageSpecificQuestions={[
         "What are her key technical skills?",

@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import InlineChatBot from './components/InlineChatBot';
+import FloatingChatBubble from './components/FloatingChatBubble';
 
 export default function Home() {
   return (
@@ -107,8 +107,8 @@ export default function Home() {
 
     </main>
 
-    {/* Inline ChatBot */}
-    <InlineChatBot 
+    {/* Floating Chat Bubble */}
+    <FloatingChatBubble 
       pageContext="Portfolio and Background"
       pageSpecificQuestions={[
         "What's her background in AI and data engineering?",
