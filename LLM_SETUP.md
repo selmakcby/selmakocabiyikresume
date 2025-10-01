@@ -23,9 +23,11 @@ This guide explains how to set up different LLM options for the chatbot assistan
 
 3. Set environment variables in Vercel:
    ```
-   OLLAMA_URL=http://your-server:11434
+   OLLAMA_URL=https://your-server.com:11434
    OLLAMA_MODEL=llama2:7b
    ```
+   
+   **Important:** The URL must be publicly accessible (not localhost) for Vercel deployment.
 
 **Pros:** Free, private, no API limits
 **Cons:** Requires your own server/hosting
@@ -73,6 +75,8 @@ This guide explains how to set up different LLM options for the chatbot assistan
 ## 🚀 Quick Start (No Setup Required)
 
 The chatbot works immediately with **rule-based responses** - no API keys needed! It provides intelligent responses based on Selma's information without any external services.
+
+**Current Status:** The chatbot is fully functional with rule-based responses. Ollama integration is ready but requires a publicly accessible Ollama server to work in production.
 
 ## 🔧 Current Configuration
 

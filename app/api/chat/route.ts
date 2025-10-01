@@ -186,33 +186,72 @@ async function generateOpenAIResponse(message: string, userType: string, apiKey:
 
 async function generateOllamaResponse(message: string, userType: string): Promise<string> {
   const systemPrompt = SYSTEM_PROMPTS[userType as keyof typeof SYSTEM_PROMPTS];
-  const ollamaUrl = process.env.OLLAMA_URL || 'http://localhost:11434';
-  const model = process.env.OLLAMA_MODEL || 'llama2:7b'; // Default to llama2, but can use mistral, codellama, etc.
+  const ollamaUrl = process.env.OLLAMA_URL;
+  const model = process.env.OLLAMA_MODEL || 'llama2:7b';
   
-  const prompt = `${systemPrompt}\n\n${SELMA_BACKGROUND}\n\nAlways be helpful, professional, and accurate. If you don't know something specific about Selma, say so honestly. Keep responses concise but informative.\n\nUser: ${message}\nAssistant:`;
-  
-  const response = await fetch(`${ollamaUrl}/api/generate`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      model: model,
-      prompt: prompt,
-      stream: false,
-      options: {
-        temperature: 0.7,
-        max_tokens: 300,
-      }
-    }),
-  });
-
-  if (!response.ok) {
-    throw new Error(`Ollama API error: ${response.status}`);
+  // If no Ollama URL is configured, throw error to fall back to next option
+  if (!ollamaUrl) {
+    throw new Error('Ollama URL not configured');
   }
+  
+  const fullPrompt = `${systemPrompt}\n\n${SELMA_BACKGROUND}\n\nAlways be helpful, professional, and accurate. If you don't know something specific about Selma, say so honestly. Keep responses concise but informative.\n\nUser: ${message}\nAssistant:`;
+  
+  try {
+    // Try the newer /api/chat endpoint first (Ollama 0.1.15+)
+    const response = await fetch(`${ollamaUrl}/api/chat`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: model,
+        messages: [
+          {
+            role: 'user',
+            content: fullPrompt
+          }
+        ],
+        stream: false,
+        options: {
+          temperature: 0.7,
+          num_predict: 300,
+        }
+      }),
+    });
 
-  const data = await response.json();
-  return data.response || 'Sorry, I had trouble generating a response.';
+    if (response.ok) {
+      const data = await response.json();
+      return data.message?.content || 'Sorry, I had trouble generating a response.';
+    }
+    
+    // If /api/chat fails, try the older /api/generate endpoint
+    const generateResponse = await fetch(`${ollamaUrl}/api/generate`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: model,
+        prompt: fullPrompt,
+        stream: false,
+        options: {
+          temperature: 0.7,
+          num_predict: 300,
+        }
+      }),
+    });
+
+    if (!generateResponse.ok) {
+      throw new Error(`Ollama API error: ${generateResponse.status}`);
+    }
+
+    const generateData = await generateResponse.json();
+    return generateData.response || 'Sorry, I had trouble generating a response.';
+    
+  } catch (error) {
+    console.error('Ollama connection error:', error);
+    throw new Error('Failed to connect to Ollama server');
+  }
 }
 
 async function generateHuggingFaceResponse(message: string, userType: string, apiKey: string): Promise<string> {
