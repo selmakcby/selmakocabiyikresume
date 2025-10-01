@@ -63,7 +63,14 @@ LANGUAGES:
 - Korean: A2
 
 ACADEMIC PROJECTS (Bachelor's in AI at VU Amsterdam):
-1. Bachelor Thesis: Enhancing Workflow Automation with MCP and Claude AI
+
+1. BACHELOR THESIS: "Enhancing Workflow Automation with MCP and Claude AI"
+   - Focus: Integration of Model Context Protocol (MCP) with Claude AI to enhance workflow automation capabilities
+   - Demonstrates how LLMs can be connected with various tools and workflows to create intelligent, context-aware automation systems
+   - Key Technologies: Model Context Protocol (MCP), Claude AI, Workflow Automation, n8n Platform, B2B Data Enrichment
+   - This was completed at CoreMagnet as an AI Engineer Intern
+   - Full thesis PDF available on portfolio website
+
 2. Machine Learning: Predictive ML Models on Video Game Dataset
 3. Statistics & R: Statistical Analysis Assignments (3 projects)
 4. Algorithms & Deep Learning: Neural Networks, Optimization, Evolutionary Algorithms
