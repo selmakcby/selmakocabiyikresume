@@ -106,15 +106,28 @@ async function getSelmaCVContent(): Promise<string> {
   return SELMA_CV_CONTENT;
 }
 
-// System prompts for different user types - KEEP RESPONSES SHORT AND STRUCTURED
+// Function to clean markdown formatting from responses
+function cleanMarkdown(text: string): string {
+  return text
+    .replace(/\*\*(.*?)\*\*/g, '$1') // Remove bold **text**
+    .replace(/\*(.*?)\*/g, '$1') // Remove italic *text*
+    .replace(/^#+\s*/gm, '') // Remove headers # ## ###
+    .replace(/\[(.*?)\]\(.*?\)/g, '$1') // Remove links [text](url)
+    .replace(/`(.*?)`/g, '$1') // Remove code `text`
+    .replace(/^\s*[-*+]\s*/gm, '- ') // Normalize bullet points to simple dashes
+    .replace(/^\s*\d+\.\s*/gm, '') // Remove numbered lists
+    .trim();
+}
+
+// System prompts for different user types - KEEP RESPONSES SHORT AND CLEAN
 const SYSTEM_PROMPTS = {
-  hiring_manager: `You are Selma's AI assistant. Keep responses SHORT (1-2 sentences max) and STRUCTURED. Use bullet points when listing multiple items. Be professional and positive. Focus on her key qualifications: MCP thesis, RAG systems, AI/ML expertise. If you don't know something specific, just say "Contact Selma directly for details."`,
+  hiring_manager: `You are Selma's AI assistant. Keep responses SHORT (1-2 sentences max) and CLEAN. NO markdown formatting. Use simple bullet points (-) for lists. Be professional and positive. Focus on her key qualifications: MCP thesis, RAG systems, AI/ML expertise. If you don't know something specific, just say "Contact Selma directly for details."`,
   
-  student: `You are Selma's AI assistant. Keep responses SHORT (1-2 sentences max) and STRUCTURED. Use bullet points for lists. Be friendly and encouraging. Focus on her academic projects and learning journey. If you don't know something specific, suggest "Check her GitHub or contact her directly."`,
+  student: `You are Selma's AI assistant. Keep responses SHORT (1-2 sentences max) and CLEAN. NO markdown formatting. Use simple bullet points (-) for lists. Be friendly and encouraging. Focus on her academic projects and learning journey. If you don't know something specific, suggest "Check her GitHub or contact her directly."`,
   
-  colleague: `You are Selma's AI assistant. Keep responses SHORT (1-2 sentences max) and STRUCTURED. Use bullet points for lists. Be collaborative and technical. Focus on her work experience and technical skills. If you don't know something specific, say "Contact Selma for more details."`,
+  colleague: `You are Selma's AI assistant. Keep responses SHORT (1-2 sentences max) and CLEAN. NO markdown formatting. Use simple bullet points (-) for lists. Be collaborative and technical. Focus on her work experience and technical skills. If you don't know something specific, say "Contact Selma for more details."`,
   
-  general: `You are Selma's AI assistant. Keep responses SHORT (1-2 sentences max) and STRUCTURED. Use bullet points for lists. Be helpful and positive. Focus on her key skills and experience. If you don't know something specific, suggest "Contact Selma directly or check her portfolio."`
+  general: `You are Selma's AI assistant. Keep responses SHORT (1-2 sentences max) and CLEAN. NO markdown formatting. Use simple bullet points (-) for lists. Be helpful and positive. Focus on her key skills and experience. If you don't know something specific, suggest "Contact Selma directly or check her portfolio."`
 };
 
 // Function to detect user type based on message
@@ -198,8 +211,9 @@ async function generateResponse(message: string, userType: string, pageContext?:
   console.log('Ollama URL exists:', !!process.env.OLLAMA_URL);
   try {
     const result = await generateOllamaResponse(message, userType, cvContent, pageContext);
+    const cleanResult = cleanMarkdown(result);
     console.log('✅ Ollama success, returning result');
-    return result;
+    return cleanResult;
   } catch (error) {
     console.error('❌ Ollama error:', error);
   }
@@ -210,8 +224,9 @@ async function generateResponse(message: string, userType: string, pageContext?:
     console.log('🚀 Attempting Groq API call...');
     try {
       const result = await generateGroqResponse(message, userType, groqApiKey, cvContent, pageContext);
-      console.log('✅ Groq API success:', result.substring(0, 100) + '...');
-      return result;
+      const cleanResult = cleanMarkdown(result);
+      console.log('✅ Groq API success:', cleanResult.substring(0, 100) + '...');
+      return cleanResult;
     } catch (error) {
       console.error('❌ Groq API error:', error);
     }
@@ -225,8 +240,9 @@ async function generateResponse(message: string, userType: string, pageContext?:
     console.log('🤖 Attempting Hugging Face API call...');
     try {
       const result = await generateHuggingFaceResponse(message, userType, hfApiKey, cvContent, pageContext);
-      console.log('✅ Hugging Face API success:', result.substring(0, 100) + '...');
-      return result;
+      const cleanResult = cleanMarkdown(result);
+      console.log('✅ Hugging Face API success:', cleanResult.substring(0, 100) + '...');
+      return cleanResult;
     } catch (error) {
       console.error('❌ Hugging Face API error:', error);
     }
@@ -266,7 +282,7 @@ async function generateOpenAIResponse(message: string, userType: string, apiKey:
       messages: [
         {
           role: 'system',
-          content: `${systemPrompt}\n\nSELMA'S ACTUAL CV CONTENT:\n${cvContent}\n\n${pageContextPrompt}\n\nIMPORTANT: Keep responses SHORT (1-2 sentences max) and STRUCTURED. Use bullet points for lists. Be concise and to the point. Use ONLY the information provided above about Selma.`
+          content: `${systemPrompt}\n\nSELMA'S ACTUAL CV CONTENT:\n${cvContent}\n\n${pageContextPrompt}\n\nIMPORTANT: Keep responses SHORT (1-2 sentences max) and CLEAN. NO markdown formatting (no **, *, #, etc). Use simple bullet points (-) for lists. Be concise and to the point. Use ONLY the information provided above about Selma.`
         },
         {
           role: 'user',
@@ -299,7 +315,7 @@ async function generateOllamaResponse(message: string, userType: string, cvConte
     throw new Error('Ollama URL not configured');
   }
   
-  const fullPrompt = `${systemPrompt}\n\nSELMA'S ACTUAL CV CONTENT:\n${cvContent}\n\n${pageContextPrompt}\n\nIMPORTANT: Keep responses SHORT (1-2 sentences max) and STRUCTURED. Use bullet points for lists. Be concise and to the point. Use ONLY the information provided above about Selma.\n\nUser: ${message}\nAssistant:`;
+  const fullPrompt = `${systemPrompt}\n\nSELMA'S ACTUAL CV CONTENT:\n${cvContent}\n\n${pageContextPrompt}\n\nIMPORTANT: Keep responses SHORT (1-2 sentences max) and CLEAN. NO markdown formatting (no **, *, #, etc). Use simple bullet points (-) for lists. Be concise and to the point. Use ONLY the information provided above about Selma.\n\nUser: ${message}\nAssistant:`;
   
   try {
     // Try the newer /api/chat endpoint first (Ollama 0.1.15+)
@@ -381,7 +397,7 @@ async function generateGroqResponse(message: string, userType: string, apiKey: s
         messages: [
           {
             role: 'system',
-            content: `${systemPrompt}\n\nSELMA'S ACTUAL CV CONTENT:\n${cvContent}\n\n${pageContextPrompt}\n\nIMPORTANT: Keep responses SHORT (1-2 sentences max) and STRUCTURED. Use bullet points for lists. Be concise and to the point. Use ONLY the information provided above about Selma.`
+            content: `${systemPrompt}\n\nSELMA'S ACTUAL CV CONTENT:\n${cvContent}\n\n${pageContextPrompt}\n\nIMPORTANT: Keep responses SHORT (1-2 sentences max) and CLEAN. NO markdown formatting (no **, *, #, etc). Use simple bullet points (-) for lists. Be concise and to the point. Use ONLY the information provided above about Selma.`
           },
           {
             role: 'user',
@@ -405,7 +421,7 @@ async function generateGroqResponse(message: string, userType: string, apiKey: s
         messages: [
           {
             role: 'system',
-            content: `${systemPrompt}\n\nSELMA'S ACTUAL CV CONTENT:\n${cvContent}\n\n${pageContextPrompt}\n\nIMPORTANT: Keep responses SHORT (1-2 sentences max) and STRUCTURED. Use bullet points for lists. Be concise and to the point. Use ONLY the information provided above about Selma.`
+            content: `${systemPrompt}\n\nSELMA'S ACTUAL CV CONTENT:\n${cvContent}\n\n${pageContextPrompt}\n\nIMPORTANT: Keep responses SHORT (1-2 sentences max) and CLEAN. NO markdown formatting (no **, *, #, etc). Use simple bullet points (-) for lists. Be concise and to the point. Use ONLY the information provided above about Selma.`
           },
           {
             role: 'user',
@@ -446,7 +462,7 @@ async function generateHuggingFaceResponse(message: string, userType: string, ap
   
   // Use a simple, reliable model
   const model = 'microsoft/DialoGPT-medium';
-  const contextPrompt = `${systemPrompt}\n\nSELMA'S ACTUAL CV CONTENT:\n${cvContent}\n\n${pageContextPrompt}\n\nIMPORTANT: Keep responses SHORT (1-2 sentences max) and STRUCTURED. Use bullet points for lists. Be concise and to the point. Use ONLY the information provided above about Selma.\n\nUser: ${message}\nAssistant:`;
+  const contextPrompt = `${systemPrompt}\n\nSELMA'S ACTUAL CV CONTENT:\n${cvContent}\n\n${pageContextPrompt}\n\nIMPORTANT: Keep responses SHORT (1-2 sentences max) and CLEAN. NO markdown formatting (no **, *, #, etc). Use simple bullet points (-) for lists. Be concise and to the point. Use ONLY the information provided above about Selma.\n\nUser: ${message}\nAssistant:`;
   
   console.log(`🤖 Calling Hugging Face model: ${model}`);
   
