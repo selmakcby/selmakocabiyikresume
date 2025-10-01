@@ -311,7 +311,7 @@ async function generateGroqResponse(message: string, userType: string, apiKey: s
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'llama3-8b-8192', // Fast and reliable model
+        model: 'llama-3.1-8b-instant', // Fast and reliable model
         messages: [
           {
             role: 'system',
@@ -334,6 +334,23 @@ async function generateGroqResponse(message: string, userType: string, apiKey: s
     if (!response.ok) {
       const errorText = await response.text();
       console.log(`❌ Groq API error: ${response.status} - ${errorText}`);
+      console.log(`📝 Request body:`, JSON.stringify({
+        model: 'llama-3.1-8b-instant',
+        messages: [
+          {
+            role: 'system',
+            content: `${systemPrompt}\n\n${SELMA_BACKGROUND}\n\nAlways be helpful, professional, and accurate. If you don't know something specific about Selma, say so honestly. Keep responses concise but informative.`
+          },
+          {
+            role: 'user',
+            content: message
+          }
+        ],
+        max_tokens: 200,
+        temperature: 0.7,
+        top_p: 0.9,
+        stream: false,
+      }, null, 2));
       throw new Error(`Groq API error: ${response.status}`);
     }
 
