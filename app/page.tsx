@@ -1,8 +1,14 @@
+'use client';
+
 import Link from 'next/link';
+import { useState } from 'react';
+import ChatBot from './components/ChatBot';
 
 export default function Home() {
+  const [isChatOpen, setIsChatOpen] = useState(false);
   return (
-    <main className="min-h-screen p-8 space-y-24">
+    <>
+      <main className="min-h-screen p-8 space-y-24">
       <section className="max-w-4xl mx-auto text-center space-y-6">
         <div className="space-y-4">
           <h1 className="text-4xl sm:text-6xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
@@ -69,12 +75,12 @@ export default function Home() {
         </div>
         <div className="space-y-4">
           <div>
-            <p className="text-gray-600 dark:text-gray-300">Phone:</p>
-            <a href="tel:+31634302423" className="font-medium hover:underline">+31 634302423</a>
-          </div>
-          <div>
             <p className="text-gray-600 dark:text-gray-300">Email:</p>
             <a href="mailto:selmabiyik@icloud.com" className="font-medium hover:underline">selmabiyik@icloud.com</a>
+          </div>
+          <div>
+            <p className="text-gray-600 dark:text-gray-300">Email (Alternative):</p>
+            <a href="mailto:selmabiyik222@gmail.com" className="font-medium hover:underline">selmabiyik222@gmail.com</a>
           </div>
           <div>
             <p className="text-gray-600 dark:text-gray-300">Location:</p>
@@ -100,6 +106,23 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* AI Assistant Button */}
+      <section className="fixed bottom-6 right-6 z-40">
+        <button
+          onClick={() => setIsChatOpen(true)}
+          className="bg-purple-600 hover:bg-purple-700 text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center space-x-2 group"
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+          </svg>
+          <span className="hidden group-hover:block text-sm font-medium">Chat with AI</span>
+        </button>
+      </section>
     </main>
+
+    {/* ChatBot Modal */}
+    <ChatBot isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
+    </>
   );
 }
