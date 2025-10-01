@@ -1,11 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
-import PageChatBot from './components/PageChatBot';
+import InlineChatBot from './components/InlineChatBot';
 
 export default function Home() {
-  const [isChatOpen, setIsChatOpen] = useState(false);
   return (
     <>
       <main className="min-h-screen p-8 space-y-24">
@@ -107,33 +105,19 @@ export default function Home() {
         </div>
       </section>
 
-      {/* AI Assistant Button */}
-      <section className="fixed bottom-6 right-6 z-40">
-        <button
-          onClick={() => setIsChatOpen(true)}
-          className="bg-purple-600 hover:bg-purple-700 text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center space-x-2 group"
-        >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-          </svg>
-          <span className="hidden group-hover:block text-sm font-medium">Chat with AI</span>
-        </button>
-      </section>
     </main>
 
-    {/* ChatBot Modal */}
-              <PageChatBot 
-                isOpen={isChatOpen} 
-                onClose={() => setIsChatOpen(false)}
-                pageContext="Portfolio and Background"
-                pageSpecificQuestions={[
-                  "What's her background in AI and data engineering?",
-                  "Tell me about her impressive MCP expertise and thesis work",
-                  "What programming languages and frameworks does she master?",
-                  "What makes her an outstanding candidate for tech roles?",
-                  "What's her experience with machine learning?"
-                ]}
-              />
+    {/* Inline ChatBot */}
+    <InlineChatBot 
+      pageContext="Portfolio and Background"
+      pageSpecificQuestions={[
+        "What's her background in AI and data engineering?",
+        "Tell me about her impressive MCP expertise and thesis work",
+        "What programming languages and frameworks does she master?",
+        "What makes her an outstanding candidate for tech roles?",
+        "What's her experience with machine learning?"
+      ]}
+    />
     </>
   );
 }
