@@ -144,7 +144,7 @@ export default function FloatingChatBubble({ pageContext, pageSpecificQuestions 
         
         {/* Expanded Chat Bubble */}
         {isExpanded && (
-          <div className="bg-white rounded-3xl shadow-2xl border border-gray-200 h-full flex flex-col overflow-hidden">
+          <div className="bg-black rounded-3xl shadow-2xl border border-gray-800 h-full flex flex-col overflow-hidden">
             {/* Chat Bubble Header */}
             <div className="bg-gradient-to-r from-purple-600 to-purple-700 text-white p-4 rounded-t-3xl flex items-center justify-between">
               <div className="flex items-center space-x-3">
@@ -171,7 +171,7 @@ export default function FloatingChatBubble({ pageContext, pageSpecificQuestions 
             </div>
 
             {/* Messages Area */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
+            <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-black">
               {messages.map((message) => (
                 <div
                   key={message.id}
@@ -181,7 +181,7 @@ export default function FloatingChatBubble({ pageContext, pageSpecificQuestions 
                     className={`max-w-xs lg:max-w-md px-4 py-3 rounded-2xl ${
                       message.sender === 'user'
                         ? 'bg-purple-600 text-white rounded-br-md'
-                        : 'bg-white text-gray-800 border border-gray-200 rounded-bl-md shadow-sm'
+                        : 'bg-gray-800 text-white border border-gray-700 rounded-bl-md'
                     }`}
                   >
                     {message.isTyping ? (
@@ -201,14 +201,14 @@ export default function FloatingChatBubble({ pageContext, pageSpecificQuestions 
 
             {/* Suggested Questions */}
             {messages.length === 1 && (
-              <div className="p-4 bg-gray-50 border-t border-gray-200">
-                <p className="text-xs text-gray-500 mb-2 font-medium">Suggested questions:</p>
+              <div className="p-4 bg-black border-t border-gray-800">
+                <p className="text-xs text-gray-400 mb-2 font-medium">Suggested questions:</p>
                 <div className="flex flex-wrap gap-2">
                   {suggestedQuestions.slice(0, 3).map((question, index) => (
                     <button
                       key={index}
                       onClick={() => handleSuggestedClick(question)}
-                      className="text-xs bg-white text-gray-700 px-3 py-1.5 rounded-full hover:bg-purple-50 hover:text-purple-700 transition-all border border-gray-200 hover:border-purple-200 shadow-sm"
+                      className="text-xs bg-gray-800 text-gray-300 px-3 py-1.5 rounded-full hover:bg-gray-700 hover:text-white transition-all border border-gray-700 hover:border-purple-500"
                     >
                       {question.length > 35 ? question.substring(0, 35) + '...' : question}
                     </button>
@@ -218,7 +218,7 @@ export default function FloatingChatBubble({ pageContext, pageSpecificQuestions 
             )}
 
             {/* Input Area */}
-            <form onSubmit={handleSubmit} className="p-4 bg-white border-t border-gray-200">
+            <form onSubmit={handleSubmit} className="p-4 bg-black border-t border-gray-800">
               <div className="flex space-x-2">
                 <input
                   ref={inputRef}
@@ -226,7 +226,7 @@ export default function FloatingChatBubble({ pageContext, pageSpecificQuestions 
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                   placeholder={`Ask about Selma's ${pageContext.toLowerCase()}...`}
-                  className="flex-1 px-4 py-3 border border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 bg-gray-50 text-gray-800 placeholder-gray-500 text-sm"
+                  className="flex-1 px-4 py-3 border border-gray-700 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 bg-gray-900 text-white placeholder-gray-400 text-sm"
                   disabled={isLoading}
                 />
                 <button
