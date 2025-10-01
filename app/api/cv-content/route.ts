@@ -71,12 +71,38 @@ ACADEMIC PROJECTS (Bachelor's in AI at VU Amsterdam):
    - This was completed at CoreMagnet as an AI Engineer Intern
    - Full thesis PDF available on portfolio website
 
-2. Machine Learning: Predictive ML Models on Video Game Dataset
-3. Statistics & R: Statistical Analysis Assignments (3 projects)
-4. Algorithms & Deep Learning: Neural Networks, Optimization, Evolutionary Algorithms
-5. Text Mining & NLP: Natural Language Processing Poster
-6. Collective Intelligence: Energy Level and Population Size Analysis
-7. AI and Law & Ethics: Evolutionary Algorithm Model
+2. MACHINE LEARNING: "Predictive Machine Learning Models on Video Game Dataset"
+   - Focus: Exploration and implementation of various predictive machine learning models on video game dataset
+   - Compares different algorithms and their performance in predicting game-related outcomes and player behavior patterns
+   - Key Technologies: Machine Learning Algorithms, Data Analysis, Predictive Modeling, Video Game Analytics, Python & ML Libraries
+   - Full report PDF available on portfolio website
+
+3. STATISTICS & R: "Statistical Analysis Assignments (3 projects)"
+   - Multiple statistical analysis projects using R programming
+   - Demonstrates expertise in statistical modeling and data analysis
+   - Key Technologies: R programming, Statistical Analysis, Data Visualization
+
+4. ALGORITHMS & DEEP LEARNING: "Neural Networks, Optimization, and Evolutionary Algorithms"
+   - Comprehensive collection covering advanced algorithms and deep learning techniques
+   - Explores neural networks, optimization algorithms, evolutionary algorithms, and neuroevolution approaches
+   - Includes multiple sub-projects: Neural Networks, Optimization, Evolutionary Algorithms, Neuroevolution, Reinforcement Learning
+   - Key Technologies: Neural Networks, Deep Learning, Optimization Algorithms, Evolutionary Algorithms, Neuroevolution, Reinforcement Learning
+   - Multiple PDF reports available on portfolio website
+
+5. TEXT MINING & NLP: "Natural Language Processing Poster"
+   - Focus on text mining and natural language processing techniques
+   - Demonstrates understanding of NLP methods, text analysis, and machine learning applications for language processing
+   - Key Technologies: Natural Language Processing, Text Mining, Text Analysis, Machine Learning for NLP, Language Models
+   - NLP Poster PDF available on portfolio website
+
+6. COLLECTIVE INTELLIGENCE: "Energy Level and Population Size Analysis"
+   - Analysis of collective intelligence systems and their behavior patterns
+   - Key Technologies: Collective Intelligence, System Analysis, Optimization
+
+7. AI AND LAW & ETHICS: "Evolutionary Algorithm Model"
+   - Exploration of AI applications in legal and ethical contexts
+   - Focus on evolutionary algorithm modeling for ethical decision-making
+   - Key Technologies: AI Ethics, Evolutionary Algorithms, Legal AI Applications
 
 ADDITIONAL EXPERIENCE:
 1. School Coach — Stip Studentenplatform (Sep 2023 – Jul 2024)
