@@ -106,15 +106,15 @@ async function getSelmaCVContent(): Promise<string> {
   return SELMA_CV_CONTENT;
 }
 
-// System prompts for different user types
+// System prompts for different user types - KEEP RESPONSES SHORT AND STRUCTURED
 const SYSTEM_PROMPTS = {
-  hiring_manager: `You are Selma Kocabıyık's AI assistant, helping hiring managers and recruiters discover her exceptional qualifications. Be professional and enthusiastic, highlighting her outstanding technical skills and extensive experience. Focus on how her impressive background aligns perfectly with data engineering, AI, and automation roles. Emphasize her exceptional ability to transform complex processes into actionable insights and her deep MCP expertise from her bachelor's thesis. Always present her in the most positive light possible. If you don't have specific information, direct them to contact her directly via email or check her portfolio, YouTube, Replicate, or other platforms for more details.`,
+  hiring_manager: `You are Selma's AI assistant. Keep responses SHORT (1-2 sentences max) and STRUCTURED. Use bullet points when listing multiple items. Be professional and positive. Focus on her key qualifications: MCP thesis, RAG systems, AI/ML expertise. If you don't know something specific, just say "Contact Selma directly for details."`,
   
-  student: `You are Selma's AI assistant helping fellow students learn about her amazing academic journey and impressive projects. Be friendly, educational, and inspiring, explaining technical concepts clearly while highlighting her achievements. Share valuable insights about AI/ML learning paths, her exceptional project experiences, and outstanding academic achievements, especially her MCP thesis work. Always encourage and motivate students. If you don't have specific information, suggest they contact Selma directly or explore her GitHub, YouTube, and other platforms for more insights.`,
+  student: `You are Selma's AI assistant. Keep responses SHORT (1-2 sentences max) and STRUCTURED. Use bullet points for lists. Be friendly and encouraging. Focus on her academic projects and learning journey. If you don't know something specific, suggest "Check her GitHub or contact her directly."`,
   
-  colleague: `You are Selma's AI assistant helping potential colleagues understand her exceptional work style and impressive expertise. Be collaborative and technical, focusing on her outstanding experience with data pipelines, automation, and AI systems. Highlight her exceptional curiosity, passion for innovation, and deep MCP knowledge. Present her as an amazing team member and technical leader. If you don't have specific details, encourage them to reach out to her directly or explore her portfolio and projects online.`,
+  colleague: `You are Selma's AI assistant. Keep responses SHORT (1-2 sentences max) and STRUCTURED. Use bullet points for lists. Be collaborative and technical. Focus on her work experience and technical skills. If you don't know something specific, say "Contact Selma for more details."`,
   
-  general: `You are Selma Kocabıyık's AI assistant. Help visitors discover her impressive background, outstanding skills, and extensive experience in AI and data engineering. Be helpful, informative, professional, and always positive while showcasing her exceptional technical expertise and passion for innovation. Highlight her deep MCP experience and multiple successful projects. If you don't have specific information about something, always suggest they contact her directly via email or explore her portfolio website, YouTube channel, Replicate experiments, GitHub projects, or other platforms for more details. Ensure everyone leaves feeling impressed and satisfied with the information provided.`
+  general: `You are Selma's AI assistant. Keep responses SHORT (1-2 sentences max) and STRUCTURED. Use bullet points for lists. Be helpful and positive. Focus on her key skills and experience. If you don't know something specific, suggest "Contact Selma directly or check her portfolio."`
 };
 
 // Function to detect user type based on message
@@ -266,7 +266,7 @@ async function generateOpenAIResponse(message: string, userType: string, apiKey:
       messages: [
         {
           role: 'system',
-          content: `${systemPrompt}\n\nSELMA'S ACTUAL CV CONTENT:\n${cvContent}\n\n${pageContextPrompt}\n\nAlways be helpful, professional, and accurate. Use ONLY the information provided above about Selma. If you don't know something specific about Selma, direct them to contact her directly or explore her portfolio, YouTube, Replicate, or other platforms for more details. Keep responses concise but informative.`
+          content: `${systemPrompt}\n\nSELMA'S ACTUAL CV CONTENT:\n${cvContent}\n\n${pageContextPrompt}\n\nIMPORTANT: Keep responses SHORT (1-2 sentences max) and STRUCTURED. Use bullet points for lists. Be concise and to the point. Use ONLY the information provided above about Selma.`
         },
         {
           role: 'user',
@@ -299,7 +299,7 @@ async function generateOllamaResponse(message: string, userType: string, cvConte
     throw new Error('Ollama URL not configured');
   }
   
-  const fullPrompt = `${systemPrompt}\n\nSELMA'S ACTUAL CV CONTENT:\n${cvContent}\n\n${pageContextPrompt}\n\nAlways be helpful, professional, and accurate. Use ONLY the information provided above about Selma. If you don't know something specific about Selma, direct them to contact her directly or explore her portfolio, YouTube, Replicate, or other platforms for more details. Keep responses concise but informative.\n\nUser: ${message}\nAssistant:`;
+  const fullPrompt = `${systemPrompt}\n\nSELMA'S ACTUAL CV CONTENT:\n${cvContent}\n\n${pageContextPrompt}\n\nIMPORTANT: Keep responses SHORT (1-2 sentences max) and STRUCTURED. Use bullet points for lists. Be concise and to the point. Use ONLY the information provided above about Selma.\n\nUser: ${message}\nAssistant:`;
   
   try {
     // Try the newer /api/chat endpoint first (Ollama 0.1.15+)
@@ -381,7 +381,7 @@ async function generateGroqResponse(message: string, userType: string, apiKey: s
         messages: [
           {
             role: 'system',
-            content: `${systemPrompt}\n\nSELMA'S ACTUAL CV CONTENT:\n${cvContent}\n\n${pageContextPrompt}\n\nAlways be helpful, professional, and accurate. Use ONLY the information provided above about Selma. If you don't know something specific about Selma, direct them to contact her directly or explore her portfolio, YouTube, Replicate, or other platforms for more details. Keep responses concise but informative.`
+            content: `${systemPrompt}\n\nSELMA'S ACTUAL CV CONTENT:\n${cvContent}\n\n${pageContextPrompt}\n\nIMPORTANT: Keep responses SHORT (1-2 sentences max) and STRUCTURED. Use bullet points for lists. Be concise and to the point. Use ONLY the information provided above about Selma.`
           },
           {
             role: 'user',
@@ -405,7 +405,7 @@ async function generateGroqResponse(message: string, userType: string, apiKey: s
         messages: [
           {
             role: 'system',
-            content: `${systemPrompt}\n\nSELMA'S ACTUAL CV CONTENT:\n${cvContent}\n\n${pageContextPrompt}\n\nAlways be helpful, professional, and accurate. Use ONLY the information provided above about Selma. If you don't know something specific about Selma, direct them to contact her directly or explore her portfolio, YouTube, Replicate, or other platforms for more details. Keep responses concise but informative.`
+            content: `${systemPrompt}\n\nSELMA'S ACTUAL CV CONTENT:\n${cvContent}\n\n${pageContextPrompt}\n\nIMPORTANT: Keep responses SHORT (1-2 sentences max) and STRUCTURED. Use bullet points for lists. Be concise and to the point. Use ONLY the information provided above about Selma.`
           },
           {
             role: 'user',
@@ -446,7 +446,7 @@ async function generateHuggingFaceResponse(message: string, userType: string, ap
   
   // Use a simple, reliable model
   const model = 'microsoft/DialoGPT-medium';
-  const contextPrompt = `${systemPrompt}\n\nSELMA'S ACTUAL CV CONTENT:\n${cvContent}\n\n${pageContextPrompt}\n\nAlways be helpful, professional, and accurate. Use ONLY the information provided above about Selma. If you don't know something specific about Selma, direct them to contact her directly or explore her portfolio, YouTube, Replicate, or other platforms for more details. Keep responses concise but informative.\n\nUser: ${message}\nAssistant:`;
+  const contextPrompt = `${systemPrompt}\n\nSELMA'S ACTUAL CV CONTENT:\n${cvContent}\n\n${pageContextPrompt}\n\nIMPORTANT: Keep responses SHORT (1-2 sentences max) and STRUCTURED. Use bullet points for lists. Be concise and to the point. Use ONLY the information provided above about Selma.\n\nUser: ${message}\nAssistant:`;
   
   console.log(`🤖 Calling Hugging Face model: ${model}`);
   
@@ -520,7 +520,7 @@ function generateRuleBasedResponse(message: string, userType: string): string {
   
   // MCP (Model Context Protocol) specific questions
   if (lowerMessage.includes('mcp') || lowerMessage.includes('model context protocol')) {
-    return `Absolutely! Selma has EXTENSIVE experience with MCP (Model Context Protocol) - it was actually the focus of her bachelor's thesis! She has multiple successful MCP projects in production environments and deep understanding of MCP architecture and best practices. This portfolio website itself demonstrates her advanced MCP integration skills - she built this intelligent chatbot assistant that seamlessly interacts with different LLM services (Groq, Ollama, Hugging Face, OpenAI) using proper API protocols and context management. Her MCP expertise is exceptional and sets her apart in the field.`;
+    return `Yes! Selma's bachelor thesis focused on MCP implementation at CoreMagnet. She has extensive experience with MCP architecture and connecting LLMs to automation workflows.`;
   }
   
   // Chatbot/AI assistant questions
@@ -575,7 +575,7 @@ function generateRuleBasedResponse(message: string, userType: string): string {
   
   // Greeting responses
   if (lowerMessage.includes('hi') || lowerMessage.includes('hello') || lowerMessage.includes('hey') || lowerMessage.includes('good morning') || lowerMessage.includes('good afternoon')) {
-    return `Hello! I'm Selma's AI assistant. I can tell you about her technical skills (Python, JavaScript, AI/ML), experience with MCP and LLM integration, data engineering projects, and what makes her a strong candidate. What would you like to know about her background?`;
+    return `Hi! I'm Selma's AI assistant. I can help with questions about her background, skills, or projects. What would you like to know?`;
   }
   
   // If user is asking about the bot's intelligence
@@ -583,6 +583,6 @@ function generateRuleBasedResponse(message: string, userType: string): string {
     return `You're right to notice! This chatbot is currently using rule-based responses, but Selma built it with the capability to integrate with advanced LLMs (Ollama, Hugging Face, OpenAI) for more intelligent responses. The system demonstrates her expertise in AI integration and MCP implementation - even the fallback system shows thoughtful design!`;
   }
   
-  // Default response - always positive and helpful
-  return `That's a great question! While I don't have specific details about that topic, I'd encourage you to reach out to Selma directly at selmabiyik@icloud.com or selmabiyik222@gmail.com. She's incredibly knowledgeable and would love to discuss her work with you! You can also explore her portfolio website (selmakocabiyikresume.vercel.app), check out her YouTube channel (@selmaakocabiyik), explore her Replicate experiments (replicate.com/selmakcby), or browse her GitHub projects (github.com/selmakcby) for more insights into her impressive work. She's always happy to connect and share more about her exceptional projects and expertise!`;
+  // Default response - short and helpful
+  return `I don't have specific details about that. Contact Selma directly at selmabiyik@icloud.com or check her portfolio for more info.`;
 }
