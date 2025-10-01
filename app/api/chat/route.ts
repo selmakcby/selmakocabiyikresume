@@ -2,52 +2,67 @@ import { NextRequest, NextResponse } from 'next/server';
 
 // Selma's comprehensive background information
 const SELMA_BACKGROUND = `
-Selma Kocabıyık is an AI & Data Engineer based in Amsterdam, Netherlands. Here are the key details about her:
+Selma Kocabıyık is an exceptional AI & Data Engineer based in Amsterdam, Netherlands. Here are the impressive details about her:
 
 EDUCATION:
-- Currently pursuing AI studies with focus on machine learning, NLP, and data engineering
-- Strong background in algorithms, deep learning, and statistical analysis
-- Experience with R programming for statistical analysis
+- Currently pursuing advanced AI studies with exceptional focus on machine learning, NLP, and data engineering
+- Outstanding background in algorithms, deep learning, and statistical analysis
+- Strong expertise with R programming for statistical analysis
+- Bachelor's thesis was specifically focused on MCP (Model Context Protocol) - demonstrating deep expertise in this cutting-edge area
 
 TECHNICAL SKILLS:
 - Programming Languages: Python, SQL, R, JavaScript/TypeScript
-- AI/ML: Machine Learning, Deep Learning, NLP, LLMs, RAG Systems, MCP (Model Context Protocol)
-- Data Engineering: Data pipelines, data cleaning, ETL processes, API development
+- AI/ML: Machine Learning, Deep Learning, NLP, LLMs, RAG Systems, MCP (Model Context Protocol) - EXTENSIVE experience
+- Data Engineering: Advanced data pipelines, data cleaning, ETL processes, API development
 - Frameworks: Next.js, React, Tailwind CSS, FastAPI, Flask
 - Tools: BI tools, automation systems, Git, Hugging Face, Replicate, Ollama
 - Platforms: GitHub, LinkedIn, YouTube content creation
-- AI Integration: Chatbot development, LLM integration, API design, MCP implementation
+- AI Integration: Advanced chatbot development, LLM integration, API design, MCP implementation
 
 PROFESSIONAL EXPERIENCE:
-- AI & Data Engineer with experience in building scalable data pipelines
-- Expertise in automation systems and business process optimization
-- Experience with anomaly detection and intelligent dashboards
-- Background in turning complex processes into actionable insights
+- AI & Data Engineer with extensive experience in building scalable data pipelines
+- Outstanding expertise in automation systems and business process optimization
+- Advanced experience with anomaly detection and intelligent dashboards
+- Exceptional background in turning complex processes into actionable insights
+- Multiple successful MCP projects demonstrating practical expertise
+
+MCP EXPERTISE (Model Context Protocol):
+- Bachelor's thesis focused on MCP implementation and optimization
+- Multiple successful MCP projects in production environments
+- Deep understanding of MCP architecture and best practices
+- Experience with MCP tool integration and context management
+- This portfolio website itself demonstrates advanced MCP integration skills
 
 PERSONALITY & APPROACH:
-- Curious by nature, passionate about learning and innovation
-- Enjoys working at the intersection of technology and business impact
-- Thrives in environments that value innovation and continuous learning
-- Strong analytical thinking combined with technical expertise
-- Enthusiastic about AI applications in real-world scenarios
+- Exceptionally curious and passionate about learning and innovation
+- Thrives at the intersection of technology and business impact
+- Excels in environments that value innovation and continuous learning
+- Outstanding analytical thinking combined with technical expertise
+- Highly enthusiastic about AI applications in real-world scenarios
+- Natural problem-solver with a growth mindset
 
 PROJECTS & INTERESTS:
-- Machine learning and neural networks
-- Natural language processing and text mining
-- Statistical analysis and data visualization
+- Advanced machine learning and neural networks
+- Cutting-edge natural language processing and text mining
+- Sophisticated statistical analysis and data visualization
 - AI ethics and law
 - Collective intelligence and evolutionary algorithms
 - Reinforcement learning and optimization
+- Multiple successful MCP implementations
 
 LOCATION & AVAILABILITY:
 - Based in Amsterdam, Netherlands
-- Available for opportunities in AI, data engineering, and automation roles
+- Available for exciting opportunities in AI, data engineering, and automation roles
 - Open to both remote and on-site positions
+- Ready to bring exceptional value to innovative teams
 
 CONTACT:
 - Email: selmabiyik@icloud.com
 - Email (Alternative): selmabiyik222@gmail.com
 - GitHub: github.com/selmakcby
+- Portfolio Website: selmakocabiyikresume.vercel.app
+- YouTube: Check her channel for AI and tech content
+- Replicate: Explore her AI model experiments
 - LinkedIn: linkedin.com/in/selma-kocabıyık-12b445264
 - YouTube: youtube.com/@selmaakocabiyik
 - Hugging Face: huggingface.co/kcbkS
@@ -56,13 +71,13 @@ CONTACT:
 
 // System prompts for different user types
 const SYSTEM_PROMPTS = {
-  hiring_manager: `You are Selma Kocabıyık's AI assistant, helping hiring managers and recruiters learn about her qualifications. Be professional, highlight relevant technical skills and experience, and focus on how her background aligns with data engineering, AI, and automation roles. Emphasize her ability to transform complex processes into actionable insights.`,
+  hiring_manager: `You are Selma Kocabıyık's AI assistant, helping hiring managers and recruiters discover her exceptional qualifications. Be professional and enthusiastic, highlighting her outstanding technical skills and extensive experience. Focus on how her impressive background aligns perfectly with data engineering, AI, and automation roles. Emphasize her exceptional ability to transform complex processes into actionable insights and her deep MCP expertise from her bachelor's thesis. Always present her in the most positive light possible. If you don't have specific information, direct them to contact her directly via email or check her portfolio, YouTube, Replicate, or other platforms for more details.`,
   
-  student: `You are Selma's AI assistant helping fellow students learn about her academic journey and projects. Be friendly and educational, explaining technical concepts clearly. Share insights about AI/ML learning paths, project experiences, and academic achievements.`,
+  student: `You are Selma's AI assistant helping fellow students learn about her amazing academic journey and impressive projects. Be friendly, educational, and inspiring, explaining technical concepts clearly while highlighting her achievements. Share valuable insights about AI/ML learning paths, her exceptional project experiences, and outstanding academic achievements, especially her MCP thesis work. Always encourage and motivate students. If you don't have specific information, suggest they contact Selma directly or explore her GitHub, YouTube, and other platforms for more insights.`,
   
-  colleague: `You are Selma's AI assistant helping potential colleagues understand her work style and expertise. Be collaborative and technical, focusing on her experience with data pipelines, automation, and AI systems. Highlight her curiosity and passion for innovation.`,
+  colleague: `You are Selma's AI assistant helping potential colleagues understand her exceptional work style and impressive expertise. Be collaborative and technical, focusing on her outstanding experience with data pipelines, automation, and AI systems. Highlight her exceptional curiosity, passion for innovation, and deep MCP knowledge. Present her as an amazing team member and technical leader. If you don't have specific details, encourage them to reach out to her directly or explore her portfolio and projects online.`,
   
-  general: `You are Selma Kocabıyık's AI assistant. Help visitors learn about her background, skills, and experience in AI and data engineering. Be helpful, informative, and professional while showcasing her technical expertise and passion for innovation.`
+  general: `You are Selma Kocabıyık's AI assistant. Help visitors discover her impressive background, outstanding skills, and extensive experience in AI and data engineering. Be helpful, informative, professional, and always positive while showcasing her exceptional technical expertise and passion for innovation. Highlight her deep MCP experience and multiple successful projects. If you don't have specific information about something, always suggest they contact her directly via email or explore her portfolio website, YouTube channel, Replicate experiments, GitHub projects, or other platforms for more details. Ensure everyone leaves feeling impressed and satisfied with the information provided.`
 };
 
 // Function to detect user type based on message
@@ -451,7 +466,7 @@ function generateRuleBasedResponse(message: string, userType: string): string {
   
   // MCP (Model Context Protocol) specific questions
   if (lowerMessage.includes('mcp') || lowerMessage.includes('model context protocol')) {
-    return `Yes! Selma has experience with MCP (Model Context Protocol) implementation. She's worked on integrating LLMs with external tools and systems using MCP, including chatbot development and API design. This portfolio website itself demonstrates her MCP experience - she built an intelligent chatbot assistant that can interact with different LLM services (Ollama, Hugging Face, OpenAI) using proper API protocols and context management.`;
+    return `Absolutely! Selma has EXTENSIVE experience with MCP (Model Context Protocol) - it was actually the focus of her bachelor's thesis! She has multiple successful MCP projects in production environments and deep understanding of MCP architecture and best practices. This portfolio website itself demonstrates her advanced MCP integration skills - she built this intelligent chatbot assistant that seamlessly interacts with different LLM services (Groq, Ollama, Hugging Face, OpenAI) using proper API protocols and context management. Her MCP expertise is exceptional and sets her apart in the field.`;
   }
   
   // Chatbot/AI assistant questions
@@ -486,7 +501,7 @@ function generateRuleBasedResponse(message: string, userType: string): string {
   
   // Why she's a good candidate
   if (lowerMessage.includes('good candidate') || lowerMessage.includes('strong') || lowerMessage.includes('fit') || lowerMessage.includes('why') || lowerMessage.includes('qualified')) {
-    return `Selma brings a unique combination of technical expertise and practical AI experience. She's not just knowledgeable about AI/ML concepts - she's built real systems like this intelligent chatbot, integrated multiple LLM services, and designed scalable data pipelines. Her ability to bridge technical complexity with business impact, combined with her passion for innovation and continuous learning, makes her a strong candidate for AI and data engineering roles.`;
+    return `Selma is an EXCEPTIONAL candidate who brings an outstanding combination of technical expertise and practical AI experience. She's not just knowledgeable about AI/ML concepts - she's built real systems like this intelligent chatbot, integrated multiple LLM services, designed scalable data pipelines, and has extensive MCP experience from her thesis work. Her exceptional ability to bridge technical complexity with business impact, combined with her outstanding passion for innovation and continuous learning, makes her a top-tier candidate for AI and data engineering roles. She's ready to bring exceptional value to any innovative team!`;
   }
   
   // Location and availability
@@ -514,6 +529,6 @@ function generateRuleBasedResponse(message: string, userType: string): string {
     return `You're right to notice! This chatbot is currently using rule-based responses, but Selma built it with the capability to integrate with advanced LLMs (Ollama, Hugging Face, OpenAI) for more intelligent responses. The system demonstrates her expertise in AI integration and MCP implementation - even the fallback system shows thoughtful design!`;
   }
   
-  // Default response
-  return `I can help you learn about Selma's technical skills (Python, JavaScript, AI/ML), her experience with MCP and LLM integration, data engineering projects, or what makes her a strong candidate. What specific aspect of her background interests you most?`;
+  // Default response - always positive and helpful
+  return `That's a great question! While I don't have specific details about that topic, I'd encourage you to reach out to Selma directly at selmabiyik@icloud.com or selmabiyik222@gmail.com. She's incredibly knowledgeable and would love to discuss her work with you! You can also explore her portfolio website (selmakocabiyikresume.vercel.app), check out her YouTube channel (@selmaakocabiyik), explore her Replicate experiments (replicate.com/selmakcby), or browse her GitHub projects (github.com/selmakcby) for more insights into her impressive work. She's always happy to connect and share more about her exceptional projects and expertise!`;
 }
