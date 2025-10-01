@@ -130,11 +130,16 @@ async function generateResponse(message: string, userType: string): Promise<stri
   // 2. Try Hugging Face API (free tier available)
   const hfApiKey = process.env.HUGGINGFACE_API_KEY;
   if (hfApiKey) {
+    console.log('🤖 Attempting Hugging Face API call...');
     try {
-      return await generateHuggingFaceResponse(message, userType, hfApiKey);
+      const result = await generateHuggingFaceResponse(message, userType, hfApiKey);
+      console.log('✅ Hugging Face API success:', result.substring(0, 100) + '...');
+      return result;
     } catch (error) {
-      console.error('Hugging Face API error:', error);
+      console.error('❌ Hugging Face API error:', error);
     }
+  } else {
+    console.log('⚠️ No Hugging Face API key found');
   }
   
   // 3. Try OpenAI API if available (more expensive but better quality)
@@ -257,42 +262,72 @@ async function generateOllamaResponse(message: string, userType: string): Promis
 
 async function generateHuggingFaceResponse(message: string, userType: string, apiKey: string): Promise<string> {
   const systemPrompt = SYSTEM_PROMPTS[userType as keyof typeof SYSTEM_PROMPTS];
-  const model = process.env.HF_MODEL || 'microsoft/DialoGPT-medium';
   
-  const prompt = `${systemPrompt}\n\n${SELMA_BACKGROUND}\n\nAlways be helpful, professional, and accurate. If you don't know something specific about Selma, say so honestly. Keep responses concise but informative.\n\nUser: ${message}\nAssistant:`;
+  // Use better models - try multiple options in order of preference
+  const models = [
+    process.env.HF_MODEL || 'microsoft/DialoGPT-medium',
+    'microsoft/DialoGPT-large',
+    'facebook/blenderbot-400M-distill',
+    'EleutherAI/gpt-neo-125M'
+  ];
   
-  const response = await fetch(`https://api-inference.huggingface.co/models/${model}`, {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      inputs: prompt,
-      parameters: {
-        max_new_tokens: 150,
-        temperature: 0.7,
-        return_full_text: false,
+  const contextPrompt = `${systemPrompt}\n\n${SELMA_BACKGROUND}\n\nAlways be helpful, professional, and accurate. If you don't know something specific about Selma, say so honestly. Keep responses concise but informative.\n\nUser: ${message}\nAssistant:`;
+  
+  for (const model of models) {
+    try {
+      const response = await fetch(`https://api-inference.huggingface.co/models/${model}`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          inputs: contextPrompt,
+          parameters: {
+            max_new_tokens: 200,
+            temperature: 0.7,
+            return_full_text: false,
+            do_sample: true,
+            top_p: 0.9,
+          },
+          options: {
+            wait_for_model: true,
+            use_cache: false
+          }
+        }),
+      });
+
+      if (!response.ok) {
+        console.log(`Model ${model} failed with status ${response.status}`);
+        continue; // Try next model
       }
-    }),
-  });
 
-  if (!response.ok) {
-    throw new Error(`Hugging Face API error: ${response.status}`);
+      const data = await response.json();
+      
+      // Handle different response formats from HF API
+      if (Array.isArray(data) && data[0] && data[0].generated_text) {
+        const response = data[0].generated_text.trim();
+        // Clean up the response to remove the prompt if it's included
+        return response.replace(contextPrompt, '').trim() || response;
+      }
+      
+      if (data.error) {
+        console.log(`Model ${model} error:`, data.error);
+        continue; // Try next model
+      }
+      
+      // If we get here, the model responded but we couldn't parse it
+      console.log(`Model ${model} returned unexpected format:`, data);
+      continue;
+      
+    } catch (error) {
+      console.log(`Model ${model} exception:`, error);
+      continue; // Try next model
+    }
   }
-
-  const data = await response.json();
   
-  // Handle different response formats from HF API
-  if (Array.isArray(data) && data[0] && data[0].generated_text) {
-    return data[0].generated_text.trim();
-  }
-  
-  if (data.error) {
-    throw new Error(`Hugging Face API error: ${data.error}`);
-  }
-  
-  return 'Sorry, I had trouble generating a response.';
+  // If all models failed, throw error to fall back to rule-based
+  throw new Error('All Hugging Face models failed');
 }
 
 function generateRuleBasedResponse(message: string, userType: string): string {
