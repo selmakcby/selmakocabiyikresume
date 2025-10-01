@@ -1,16 +1,109 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+// Selma's comprehensive CV content directly embedded
+const SELMA_CV_CONTENT = `
+SELMA KOCABIYIK - CURRICULUM VITAE
+
+PERSONAL INFORMATION:
+- Name: Selma Kocabıyık
+- Location: Barendrecht, Netherlands
+- GitHub: github.com/selmakcby
+- Hugging Face: huggingface.co/kcbkS
+- Replicate: replicate.com/selmakcby
+- LinkedIn: linkedin.com/in/selma-kocabıyık-12b445264
+- YouTube: youtube.com/@selmaakocabiyik
+- Specialization: AI & Data Engineer | LLMs, NLP, RAG Systems & Business Automation
+
+PROFESSIONAL SUMMARY:
+Bachelor of Artificial Intelligence graduate from VU Amsterdam with hands-on experience in AI development, automation, and data analysis. Skilled in Python, SQL, BI tools, and automation platforms (n8n, MCP), with a proven ability to turn complex datasets into scalable systems and actionable insights.
+
+At Floorplanner, I worked as a Junior AI Developer, where I designed Retrieval-Augmented Generation (RAG) pipelines, created hierarchical data structuring strategies, and prototyped ML models to improve search and automation for millions of design records. At CoreMagnet, I implemented MCP-based LLM integrations for business automation, connecting Claude AI and other LLMs with n8n workflows to streamline B2B processes. Earlier, at Arpsar, I built Python-based pipelines for large-scale scraping, cleaning, and app development, improving dataset quality for dashboards and decision support.
+
+EXPERIENCE:
+1. Junior AI Developer — Floorplanner (2025)
+   - Designed and optimized Retrieval-Augmented Generation (RAG) pipelines for large-scale design datasets
+   - Developed hierarchical chunking strategies (project → floor → room → items) for efficient data structuring and retrieval
+   - Prototyped ML models for semantic search and product-in-room generation, improving usability of design metadata
+   - Collaborated with engineers to enhance scalability, automation, and AI-assisted workflows
+
+2. AI Engineer Intern (Bachelor Thesis) — CoreMagnet (2025)
+   - Implemented Model Context Protocol (MCP) to connect LLMs with n8n workflows
+   - Automated B2B data enrichment and sales processes, reducing manual workload and improving workflow efficiency
+   - Conducted comparative evaluation of MCP vs. API-based workflows for scalability and usability
+   - Integrated Claude AI and other LLMs with automation platforms to deliver context-aware, scalable solutions
+
+3. Data Intern — Arpsar (2023–2024)
+   - Built Python pipelines for large-scale data scraping and cleaning using BeautifulSoup, Pandas, and other libraries
+   - Improved dataset consistency and usability, enabling downstream dashboards and business applications
+   - Deployed apps with cleaned datasets using Vercel and Python backends
+
+EDUCATION:
+1. Vrije Universiteit Amsterdam (VU Amsterdam) - BSc Artificial Intelligence (Aug 2022 – Jul 2025)
+2. Korea University - Exchange, Computer and Information Sciences (Aug 2024 – Dec 2024)
+
+TECHNICAL SKILLS:
+- Programming Languages: Python, SQL, JavaScript, R
+- AI/ML Technologies: LLMs, NLP, RAG Systems, PyTorch, Transformers
+- Data & Analytics: Pandas, NumPy, Scikit-learn, Data Visualization, BI Tools
+- Automation & Workflows: n8n, Model Context Protocol (MCP), API Integration
+- Data Engineering: Data Pipelines, ETL/ELT, Data Cleaning, Large-scale Data Processing
+
+ACADEMIC PROJECTS (Bachelor's in AI at VU Amsterdam):
+
+1. BACHELOR THESIS: "Enhancing Workflow Automation with MCP and Claude AI"
+   - Focus: Integration of Model Context Protocol (MCP) with Claude AI to enhance workflow automation capabilities
+   - Demonstrates how LLMs can be connected with various tools and workflows to create intelligent, context-aware automation systems
+   - Key Technologies: Model Context Protocol (MCP), Claude AI, Workflow Automation, n8n Platform, B2B Data Enrichment
+   - This was completed at CoreMagnet as an AI Engineer Intern
+   - Full thesis PDF available on portfolio website
+
+2. MACHINE LEARNING: "Predictive Machine Learning Models on Video Game Dataset"
+   - Focus: Exploration and implementation of various predictive machine learning models on video game dataset
+   - Compares different algorithms and their performance in predicting game-related outcomes and player behavior patterns
+   - Key Technologies: Machine Learning Algorithms, Data Analysis, Predictive Modeling, Video Game Analytics, Python & ML Libraries
+   - Full report PDF available on portfolio website
+
+3. STATISTICS & R: "Statistical Analysis Assignments (3 projects)"
+   - Multiple statistical analysis projects using R programming
+   - Demonstrates expertise in statistical modeling and data analysis
+   - Key Technologies: R programming, Statistical Analysis, Data Visualization
+
+4. ALGORITHMS & DEEP LEARNING: "Neural Networks, Optimization, and Evolutionary Algorithms"
+   - Comprehensive collection covering advanced algorithms and deep learning techniques
+   - Explores neural networks, optimization algorithms, evolutionary algorithms, and neuroevolution approaches
+   - Includes multiple sub-projects: Neural Networks, Optimization, Evolutionary Algorithms, Neuroevolution, Reinforcement Learning
+   - Key Technologies: Neural Networks, Deep Learning, Optimization Algorithms, Evolutionary Algorithms, Neuroevolution, Reinforcement Learning
+   - Multiple PDF reports available on portfolio website
+
+5. TEXT MINING & NLP: "Natural Language Processing Poster"
+   - Focus on text mining and natural language processing techniques
+   - Demonstrates understanding of NLP methods, text analysis, and machine learning applications for language processing
+   - Key Technologies: Natural Language Processing, Text Mining, Text Analysis, Machine Learning for NLP, Language Models
+   - NLP Poster PDF available on portfolio website
+
+6. COLLECTIVE INTELLIGENCE: "Energy Level and Population Size Analysis"
+   - Analysis of collective intelligence systems and their behavior patterns
+   - Key Technologies: Collective Intelligence, System Analysis, Optimization
+
+7. AI AND LAW & ETHICS: "Evolutionary Algorithm Model"
+   - Exploration of AI applications in legal and ethical contexts
+   - Focus on evolutionary algorithm modeling for ethical decision-making
+   - Key Technologies: AI Ethics, Evolutionary Algorithms, Legal AI Applications
+
+CONTACT:
+- Email: selmabiyik@icloud.com
+- Email (Alternative): selmabiyik222@gmail.com
+- Portfolio Website: selmakocabiyikresume.vercel.app
+- YouTube: youtube.com/@selmaakocabiyik
+- Replicate: replicate.com/selmakcby
+- GitHub: github.com/selmakcby
+- LinkedIn: linkedin.com/in/selma-kocabıyık-12b445264
+- Hugging Face: huggingface.co/kcbkS
+`;
+
 // Function to get Selma's actual CV content
 async function getSelmaCVContent(): Promise<string> {
-  try {
-    const response = await fetch(`${process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'}/api/cv-content`);
-    const data = await response.json();
-    return data.content;
-  } catch (error) {
-    console.error('Error fetching CV content:', error);
-    // Fallback to basic info if CV content fetch fails
-    return `Selma Kocabıyık is an AI & Data Engineer with extensive experience in MCP (Model Context Protocol), RAG systems, and automation. Contact: selmabiyik@icloud.com or selmabiyik222@gmail.com`;
-  }
+  return SELMA_CV_CONTENT;
 }
 
 // System prompts for different user types
