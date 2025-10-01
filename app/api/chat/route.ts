@@ -99,19 +99,29 @@ export async function POST(request: NextRequest) {
     }
 
     const userType = detectUserType(message);
-    const systemPrompt = SYSTEM_PROMPTS[userType];
     
-    // For now, we'll use a simple response system
-    // Later we can integrate with OpenAI API or Ollama
+    // Debug logging
+    console.log('🔍 Chat API Debug Info:');
+    console.log('- Message:', message);
+    console.log('- User Type:', userType);
+    console.log('- HF API Key exists:', !!process.env.HUGGINGFACE_API_KEY);
+    console.log('- HF API Key starts with:', process.env.HUGGINGFACE_API_KEY?.substring(0, 10) + '...');
     
     const response = await generateResponse(message, userType);
     
-    return NextResponse.json({ response });
+    return NextResponse.json({ 
+      response,
+      debug: {
+        userType,
+        hfKeyExists: !!process.env.HUGGINGFACE_API_KEY,
+        responseLength: response.length
+      }
+    });
     
   } catch (error) {
     console.error('Chat API error:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Internal server error', details: error.message },
       { status: 500 }
     );
   }
