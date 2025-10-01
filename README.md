@@ -1,6 +1,6 @@
-# Adyen Application Website
+# Selma Kocabıyık - Professional Portfolio
 
-A modern, interactive application website built with Next.js and Tailwind CSS, featuring a professional CV, motivation letter, and an intelligent chatbot. This website showcases my application for a position at Adyen with a sleek Vercel-inspired design.
+A modern, interactive portfolio website built with Next.js and Tailwind CSS, featuring a professional CV, motivation letter, and project showcase. This website presents my professional background and skills with a sleek Vercel-inspired design.
 
 ## ✨ Features
 
@@ -8,7 +8,7 @@ A modern, interactive application website built with Next.js and Tailwind CSS, f
 - **Responsive Layout**: Optimized for all device sizes
 - **Interactive Navigation**: Smooth transitions between sections
 - **CV Section**: Comprehensive curriculum vitae with structured information
-- **Motivation Letter**: Professional cover letter tailored for Adyen
+- **Motivation Letter**: Professional cover letter for job applications
 - **AI Chatbot**: Interactive chatbot that answers questions about the application
 - **Dark Mode Support**: Automatic dark/light mode switching
 - **Smooth Animations**: Elegant transitions and hover effects
@@ -24,8 +24,8 @@ A modern, interactive application website built with Next.js and Tailwind CSS, f
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/selmakcby/adyenapplicaiton.git
-cd adyenapplicaiton
+git clone https://github.com/selmakcby/selmakocabiyikresume.git
+cd selmakocabiyikresume
 ```
 
 2. Install dependencies:
@@ -53,14 +53,17 @@ bun dev
 ## 🏗️ Project Structure
 
 ```
-adyenapplicaiton/
+selmakocabiyikresume/
 ├── app/
-│   ├── components/
-│   │   └── ChatBot.tsx      # Interactive chatbot component
+│   ├── components/          # React components
 │   ├── globals.css          # Global styles and custom CSS
 │   ├── layout.tsx           # Root layout component
-│   └── page.tsx             # Main application page
-├── public/                  # Static assets
+│   ├── page.tsx             # Main portfolio page
+│   ├── cv/                  # CV page
+│   ├── motivation/          # Motivation letter page
+│   ├── about/               # About page
+│   └── projects/            # Project showcase pages
+├── public/                  # Static assets and project files
 ├── package.json             # Dependencies and scripts
 ├── tailwind.config.js       # Tailwind CSS configuration
 ├── tsconfig.json           # TypeScript configuration
@@ -92,12 +95,12 @@ The integrated chatbot includes:
 - **Responsive Design**: Works seamlessly on all devices
 
 ### Supported Topics
-- Payment systems experience
 - Technical skills and tools
 - Work experience and achievements
-- Interest in Adyen
+- Educational background and projects
 - Development methodologies
 - Career goals and motivations
+- AI and data engineering expertise
 
 ## 🛠️ Technologies Used
 
@@ -126,17 +129,18 @@ This project is optimized for deployment on Vercel:
 2. Connect your repository to Vercel
 3. Deploy automatically with zero configuration
 
-The website is currently deployed at: [adyenapplicaiton.vercel.app](https://adyenapplicaiton.vercel.app)
+The website is currently deployed at: [selmakocabiyikresume.vercel.app](https://selmakocabiyikresume.vercel.app)
 
 ## 📝 Customization
 
-To customize this application for your own use:
+To customize this portfolio for your own use:
 
 1. Update personal information in the CV section
 2. Modify the motivation letter content
-3. Customize chatbot responses in `app/components/ChatBot.tsx`
+3. Update project showcase in the `app/projects/` directory
 4. Adjust colors and styling in `app/globals.css`
-5. Update the navigation and footer links
+5. Update the navigation and contact links
+6. Customize the about page with your personal story
 
 ## 🤝 Contributing
 

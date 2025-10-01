@@ -18,7 +18,7 @@ export default function Home() {
             Data Analysis, Data Cleaning, Machine Learning, LLMs, NLP, RAG Systems and Business Automation
           </p>
           <p className="text-base text-gray-500 dark:text-gray-400">
-            Specialized for Adyen Application
+            Professional Portfolio & Resume
           </p>
         </div>
       </section>
@@ -40,21 +40,21 @@ export default function Home() {
           </Link>
           <Link className="rounded-lg bg-purple-600 dark:bg-purple-700 border border-purple-600 dark:border-purple-700 p-4 hover:bg-purple-700 dark:hover:bg-purple-600 transition" href="/motivation">
             <div className="font-medium text-white">Motivation Letter</div>
-            <div className="text-sm text-purple-100">Personalized cover letter for Adyen</div>
+            <div className="text-sm text-purple-100">General cover letter for applications</div>
           </Link>
         </div>
       </section>
 
       <section className="max-w-4xl mx-auto space-y-6" id="why-fit">
         <div className="space-y-4">
-          <h2 className="text-3xl font-bold text-purple-800 dark:text-purple-200">Why I'm a Good Fit</h2>
+          <h2 className="text-3xl font-bold text-purple-800 dark:text-purple-200">Why I'm a Great Candidate</h2>
           <div className="w-16 h-1 bg-purple-400 rounded-full"></div>
         </div>
         <div className="bg-purple-50 dark:bg-purple-900/20 border-l-4 border-purple-500 p-8 rounded-r-lg">
           <p className="text-gray-700 dark:text-gray-200 mt-4">
-            As an AI & Data Engineer with experience in LLMs, NLP, and RAG systems, I bring a unique perspective to financial data analysis. 
-            My background in building scalable data pipelines and automation systems aligns perfectly with Adyen's needs for 
-            optimizing financial processes and enabling data-driven decision making.
+            As an AI & Data Engineer with experience in LLMs, NLP, and RAG systems, I bring a unique perspective to data analysis and automation. 
+            My background in building scalable data pipelines and automation systems enables me to transform complex processes into 
+            clear, actionable insights that drive business growth and efficiency.
           </p>
           <div className="mt-4">
             <a className="text-purple-600 hover:text-purple-700 dark:text-purple-400 hover:underline font-medium" href="/cv">Read more about my experience →</a>
