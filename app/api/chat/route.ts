@@ -1,73 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-// Selma's comprehensive background information
-const SELMA_BACKGROUND = `
-Selma Kocabıyık is an exceptional AI & Data Engineer based in Amsterdam, Netherlands. Here are the impressive details about her:
-
-EDUCATION:
-- Currently pursuing advanced AI studies with exceptional focus on machine learning, NLP, and data engineering
-- Outstanding background in algorithms, deep learning, and statistical analysis
-- Strong expertise with R programming for statistical analysis
-- Bachelor's thesis was specifically focused on MCP (Model Context Protocol) - demonstrating deep expertise in this cutting-edge area
-
-TECHNICAL SKILLS:
-- Programming Languages: Python, SQL, R, JavaScript/TypeScript
-- AI/ML: Machine Learning, Deep Learning, NLP, LLMs, RAG Systems, MCP (Model Context Protocol) - EXTENSIVE experience
-- Data Engineering: Advanced data pipelines, data cleaning, ETL processes, API development
-- Frameworks: Next.js, React, Tailwind CSS, FastAPI, Flask
-- Tools: BI tools, automation systems, Git, Hugging Face, Replicate, Ollama
-- Platforms: GitHub, LinkedIn, YouTube content creation
-- AI Integration: Advanced chatbot development, LLM integration, API design, MCP implementation
-
-PROFESSIONAL EXPERIENCE:
-- AI & Data Engineer with extensive experience in building scalable data pipelines
-- Outstanding expertise in automation systems and business process optimization
-- Advanced experience with anomaly detection and intelligent dashboards
-- Exceptional background in turning complex processes into actionable insights
-- Multiple successful MCP projects demonstrating practical expertise
-
-MCP EXPERTISE (Model Context Protocol):
-- Bachelor's thesis focused on MCP implementation and optimization
-- Multiple successful MCP projects in production environments
-- Deep understanding of MCP architecture and best practices
-- Experience with MCP tool integration and context management
-- This portfolio website itself demonstrates advanced MCP integration skills
-
-PERSONALITY & APPROACH:
-- Exceptionally curious and passionate about learning and innovation
-- Thrives at the intersection of technology and business impact
-- Excels in environments that value innovation and continuous learning
-- Outstanding analytical thinking combined with technical expertise
-- Highly enthusiastic about AI applications in real-world scenarios
-- Natural problem-solver with a growth mindset
-
-PROJECTS & INTERESTS:
-- Advanced machine learning and neural networks
-- Cutting-edge natural language processing and text mining
-- Sophisticated statistical analysis and data visualization
-- AI ethics and law
-- Collective intelligence and evolutionary algorithms
-- Reinforcement learning and optimization
-- Multiple successful MCP implementations
-
-LOCATION & AVAILABILITY:
-- Based in Amsterdam, Netherlands
-- Available for exciting opportunities in AI, data engineering, and automation roles
-- Open to both remote and on-site positions
-- Ready to bring exceptional value to innovative teams
-
-CONTACT:
-- Email: selmabiyik@icloud.com
-- Email (Alternative): selmabiyik222@gmail.com
-- GitHub: github.com/selmakcby
-- Portfolio Website: selmakocabiyikresume.vercel.app
-- YouTube: Check her channel for AI and tech content
-- Replicate: Explore her AI model experiments
-- LinkedIn: linkedin.com/in/selma-kocabıyık-12b445264
-- YouTube: youtube.com/@selmaakocabiyik
-- Hugging Face: huggingface.co/kcbkS
-- Replicate: replicate.com/selmakcby
-`;
+// Function to get Selma's actual CV content
+async function getSelmaCVContent(): Promise<string> {
+  try {
+    const response = await fetch(`${process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'}/api/cv-content`);
+    const data = await response.json();
+    return data.content;
+  } catch (error) {
+    console.error('Error fetching CV content:', error);
+    // Fallback to basic info if CV content fetch fails
+    return `Selma Kocabıyık is an AI & Data Engineer with extensive experience in MCP (Model Context Protocol), RAG systems, and automation. Contact: selmabiyik@icloud.com or selmabiyik222@gmail.com`;
+  }
+}
 
 // System prompts for different user types
 const SYSTEM_PROMPTS = {
@@ -107,7 +51,7 @@ function detectUserType(message: string): keyof typeof SYSTEM_PROMPTS {
 
 export async function POST(request: NextRequest) {
   try {
-    const { message } = await request.json();
+    const { message, pageContext } = await request.json();
     
     if (!message) {
       return NextResponse.json({ error: 'Message is required' }, { status: 400 });
@@ -119,15 +63,17 @@ export async function POST(request: NextRequest) {
     console.log('🔍 Chat API Debug Info:');
     console.log('- Message:', message);
     console.log('- User Type:', userType);
+    console.log('- Page Context:', pageContext);
     console.log('- HF API Key exists:', !!process.env.HUGGINGFACE_API_KEY);
     console.log('- HF API Key starts with:', process.env.HUGGINGFACE_API_KEY?.substring(0, 10) + '...');
     
-    const response = await generateResponse(message, userType);
+    const response = await generateResponse(message, userType, pageContext);
     
     return NextResponse.json({ 
       response,
       debug: {
         userType,
+        pageContext,
         groqKeyExists: !!process.env.GROQ_API_KEY,
         groqKeyPrefix: process.env.GROQ_API_KEY?.substring(0, 10) + '...',
         hfKeyExists: !!process.env.HUGGINGFACE_API_KEY,
@@ -147,15 +93,18 @@ export async function POST(request: NextRequest) {
   }
 }
 
-async function generateResponse(message: string, userType: string): Promise<string> {
+async function generateResponse(message: string, userType: string, pageContext?: string): Promise<string> {
   // Try different LLM services in order of preference (cheapest first)
   console.log('🔄 Starting LLM response generation...');
+  
+  // Get actual CV content
+  const cvContent = await getSelmaCVContent();
   
   // 1. Try Ollama (local/self-hosted - free)
   console.log('🔍 Checking Ollama...');
   console.log('Ollama URL exists:', !!process.env.OLLAMA_URL);
   try {
-    const result = await generateOllamaResponse(message, userType);
+    const result = await generateOllamaResponse(message, userType, cvContent, pageContext);
     console.log('✅ Ollama success, returning result');
     return result;
   } catch (error) {
@@ -167,7 +116,7 @@ async function generateResponse(message: string, userType: string): Promise<stri
   if (groqApiKey) {
     console.log('🚀 Attempting Groq API call...');
     try {
-      const result = await generateGroqResponse(message, userType, groqApiKey);
+      const result = await generateGroqResponse(message, userType, groqApiKey, cvContent, pageContext);
       console.log('✅ Groq API success:', result.substring(0, 100) + '...');
       return result;
     } catch (error) {
@@ -313,8 +262,11 @@ async function generateOllamaResponse(message: string, userType: string): Promis
   }
 }
 
-async function generateGroqResponse(message: string, userType: string, apiKey: string): Promise<string> {
+async function generateGroqResponse(message: string, userType: string, apiKey: string, cvContent: string, pageContext?: string): Promise<string> {
   const systemPrompt = SYSTEM_PROMPTS[userType as keyof typeof SYSTEM_PROMPTS];
+  
+  // Create page-specific context
+  const pageContextPrompt = pageContext ? `\n\nCURRENT PAGE CONTEXT: The user is currently viewing Selma's ${pageContext} page. You can provide specific information about this page and suggest related topics they might be interested in.` : '';
   
   console.log(`🚀 Calling Groq API...`);
   
@@ -330,14 +282,14 @@ async function generateGroqResponse(message: string, userType: string, apiKey: s
         messages: [
           {
             role: 'system',
-            content: `${systemPrompt}\n\n${SELMA_BACKGROUND}\n\nAlways be helpful, professional, and accurate. If you don't know something specific about Selma, say so honestly. Keep responses concise but informative.`
+            content: `${systemPrompt}\n\nSELMA'S ACTUAL CV CONTENT:\n${cvContent}\n\n${pageContextPrompt}\n\nAlways be helpful, professional, and accurate. Use ONLY the information provided above about Selma. If you don't know something specific about Selma, direct them to contact her directly or explore her portfolio, YouTube, Replicate, or other platforms for more details. Keep responses concise but informative.`
           },
           {
             role: 'user',
             content: message
           }
         ],
-        max_tokens: 200,
+        max_tokens: 300,
         temperature: 0.7,
         top_p: 0.9,
         stream: false,

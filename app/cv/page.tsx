@@ -1,6 +1,14 @@
+'use client';
+
+import { useState } from 'react';
+import PageChatBot from '../components/PageChatBot';
+
 export default function CV() {
+  const [isChatOpen, setIsChatOpen] = useState(false);
+
   return (
-    <main className="min-h-screen p-8 space-y-24">
+    <>
+      <main className="min-h-screen p-8 space-y-24">
       <section className="max-w-4xl mx-auto text-center space-y-6">
         <div className="space-y-4">
           <h1 className="text-4xl sm:text-6xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
@@ -261,6 +269,34 @@ export default function CV() {
             </section>
           </div>
       </section>
+
+      {/* AI Assistant Button */}
+      <section className="fixed bottom-6 right-6 z-40">
+        <button
+          onClick={() => setIsChatOpen(true)}
+          className="bg-purple-600 hover:bg-purple-700 text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center space-x-2 group"
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+          </svg>
+          <span className="hidden group-hover:block text-sm font-medium">Ask about my CV</span>
+        </button>
+      </section>
     </main>
+
+    {/* PageChatBot Modal */}
+    <PageChatBot 
+      isOpen={isChatOpen} 
+      onClose={() => setIsChatOpen(false)}
+      pageContext="CV and Professional Experience"
+      pageSpecificQuestions={[
+        "What are her key technical skills?",
+        "Tell me about her MCP thesis work at CoreMagnet",
+        "What experience does she have with RAG systems?",
+        "What programming languages does she master?",
+        "Tell me about her Floorplanner experience"
+      ]}
+    />
+    </>
   );
 }

@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import ChatBot from './components/ChatBot';
+import PageChatBot from './components/PageChatBot';
 
 export default function Home() {
   const [isChatOpen, setIsChatOpen] = useState(false);
@@ -122,7 +122,18 @@ export default function Home() {
     </main>
 
     {/* ChatBot Modal */}
-    <ChatBot isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
+              <PageChatBot 
+                isOpen={isChatOpen} 
+                onClose={() => setIsChatOpen(false)}
+                pageContext="Portfolio and Background"
+                pageSpecificQuestions={[
+                  "What's her background in AI and data engineering?",
+                  "Tell me about her impressive MCP expertise and thesis work",
+                  "What programming languages and frameworks does she master?",
+                  "What makes her an outstanding candidate for tech roles?",
+                  "What's her experience with machine learning?"
+                ]}
+              />
     </>
   );
 }
