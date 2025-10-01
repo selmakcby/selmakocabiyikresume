@@ -137,7 +137,22 @@ async function generateResponse(message: string, userType: string): Promise<stri
     console.error('Ollama error:', error);
   }
   
-  // 2. Try Hugging Face API (free tier available)
+  // 2. Try Groq API (fast and reliable)
+  const groqApiKey = process.env.GROQ_API_KEY;
+  if (groqApiKey) {
+    console.log('🚀 Attempting Groq API call...');
+    try {
+      const result = await generateGroqResponse(message, userType, groqApiKey);
+      console.log('✅ Groq API success:', result.substring(0, 100) + '...');
+      return result;
+    } catch (error) {
+      console.error('❌ Groq API error:', error);
+    }
+  } else {
+    console.log('⚠️ No Groq API key found');
+  }
+  
+  // 3. Try Hugging Face API (fallback)
   const hfApiKey = process.env.HUGGINGFACE_API_KEY;
   if (hfApiKey) {
     console.log('🤖 Attempting Hugging Face API call...');
@@ -267,6 +282,63 @@ async function generateOllamaResponse(message: string, userType: string): Promis
   } catch (error) {
     console.error('Ollama connection error:', error);
     throw new Error('Failed to connect to Ollama server');
+  }
+}
+
+async function generateGroqResponse(message: string, userType: string, apiKey: string): Promise<string> {
+  const systemPrompt = SYSTEM_PROMPTS[userType as keyof typeof SYSTEM_PROMPTS];
+  
+  console.log(`🚀 Calling Groq API...`);
+  
+  try {
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'llama3-8b-8192', // Fast and reliable model
+        messages: [
+          {
+            role: 'system',
+            content: `${systemPrompt}\n\n${SELMA_BACKGROUND}\n\nAlways be helpful, professional, and accurate. If you don't know something specific about Selma, say so honestly. Keep responses concise but informative.`
+          },
+          {
+            role: 'user',
+            content: message
+          }
+        ],
+        max_tokens: 200,
+        temperature: 0.7,
+        top_p: 0.9,
+        stream: false,
+      }),
+    });
+
+    console.log(`📡 Groq response status: ${response.status}`);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.log(`❌ Groq API error: ${response.status} - ${errorText}`);
+      throw new Error(`Groq API error: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log(`📦 Groq response data:`, data);
+    
+    if (data.choices && data.choices[0] && data.choices[0].message) {
+      const response = data.choices[0].message.content.trim();
+      console.log(`✅ Groq success: ${response.substring(0, 100)}...`);
+      return response;
+    }
+    
+    console.log(`⚠️ Unexpected Groq response format:`, data);
+    throw new Error('Unexpected response format from Groq');
+    
+  } catch (error) {
+    console.error(`❌ Groq exception:`, error);
+    throw error;
   }
 }
 
