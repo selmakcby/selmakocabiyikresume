@@ -131,7 +131,7 @@ async function generateResponse(message: string, userType: string, pageContext?:
   if (hfApiKey) {
     console.log('🤖 Attempting Hugging Face API call...');
     try {
-      const result = await generateHuggingFaceResponse(message, userType, hfApiKey);
+      const result = await generateHuggingFaceResponse(message, userType, hfApiKey, cvContent, pageContext);
       console.log('✅ Hugging Face API success:', result.substring(0, 100) + '...');
       return result;
     } catch (error) {
@@ -141,11 +141,11 @@ async function generateResponse(message: string, userType: string, pageContext?:
     console.log('⚠️ No Hugging Face API key found');
   }
   
-  // 3. Try OpenAI API if available (more expensive but better quality)
+  // 4. Try OpenAI API if available (more expensive but better quality)
   const openaiApiKey = process.env.OPENAI_API_KEY;
   if (openaiApiKey) {
     try {
-      return await generateOpenAIResponse(message, userType, openaiApiKey);
+      return await generateOpenAIResponse(message, userType, openaiApiKey, cvContent, pageContext);
     } catch (error) {
       console.error('OpenAI API error:', error);
     }
@@ -156,8 +156,11 @@ async function generateResponse(message: string, userType: string, pageContext?:
   return generateRuleBasedResponse(message, userType);
 }
 
-async function generateOpenAIResponse(message: string, userType: string, apiKey: string): Promise<string> {
+async function generateOpenAIResponse(message: string, userType: string, apiKey: string, cvContent: string, pageContext?: string): Promise<string> {
   const systemPrompt = SYSTEM_PROMPTS[userType as keyof typeof SYSTEM_PROMPTS];
+  
+  // Create page-specific context
+  const pageContextPrompt = pageContext ? `\n\nCURRENT PAGE CONTEXT: The user is currently viewing Selma's ${pageContext} page. You can provide specific information about this page and suggest related topics they might be interested in.` : '';
   
   const response = await fetch('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
@@ -170,7 +173,7 @@ async function generateOpenAIResponse(message: string, userType: string, apiKey:
       messages: [
         {
           role: 'system',
-          content: `${systemPrompt}\n\n${SELMA_BACKGROUND}\n\nAlways be helpful, professional, and accurate. If you don't know something specific about Selma, say so honestly. Keep responses concise but informative.`
+          content: `${systemPrompt}\n\nSELMA'S ACTUAL CV CONTENT:\n${cvContent}\n\n${pageContextPrompt}\n\nAlways be helpful, professional, and accurate. Use ONLY the information provided above about Selma. If you don't know something specific about Selma, direct them to contact her directly or explore her portfolio, YouTube, Replicate, or other platforms for more details. Keep responses concise but informative.`
         },
         {
           role: 'user',
@@ -190,17 +193,20 @@ async function generateOpenAIResponse(message: string, userType: string, apiKey:
   return data.choices[0]?.message?.content || 'Sorry, I had trouble generating a response.';
 }
 
-async function generateOllamaResponse(message: string, userType: string): Promise<string> {
+async function generateOllamaResponse(message: string, userType: string, cvContent: string, pageContext?: string): Promise<string> {
   const systemPrompt = SYSTEM_PROMPTS[userType as keyof typeof SYSTEM_PROMPTS];
   const ollamaUrl = process.env.OLLAMA_URL;
   const model = process.env.OLLAMA_MODEL || 'llama2:7b';
+  
+  // Create page-specific context
+  const pageContextPrompt = pageContext ? `\n\nCURRENT PAGE CONTEXT: The user is currently viewing Selma's ${pageContext} page. You can provide specific information about this page and suggest related topics they might be interested in.` : '';
   
   // If no Ollama URL is configured, throw error to fall back to next option
   if (!ollamaUrl) {
     throw new Error('Ollama URL not configured');
   }
   
-  const fullPrompt = `${systemPrompt}\n\n${SELMA_BACKGROUND}\n\nAlways be helpful, professional, and accurate. If you don't know something specific about Selma, say so honestly. Keep responses concise but informative.\n\nUser: ${message}\nAssistant:`;
+  const fullPrompt = `${systemPrompt}\n\nSELMA'S ACTUAL CV CONTENT:\n${cvContent}\n\n${pageContextPrompt}\n\nAlways be helpful, professional, and accurate. Use ONLY the information provided above about Selma. If you don't know something specific about Selma, direct them to contact her directly or explore her portfolio, YouTube, Replicate, or other platforms for more details. Keep responses concise but informative.\n\nUser: ${message}\nAssistant:`;
   
   try {
     // Try the newer /api/chat endpoint first (Ollama 0.1.15+)
@@ -339,12 +345,15 @@ async function generateGroqResponse(message: string, userType: string, apiKey: s
   }
 }
 
-async function generateHuggingFaceResponse(message: string, userType: string, apiKey: string): Promise<string> {
+async function generateHuggingFaceResponse(message: string, userType: string, apiKey: string, cvContent: string, pageContext?: string): Promise<string> {
   const systemPrompt = SYSTEM_PROMPTS[userType as keyof typeof SYSTEM_PROMPTS];
+  
+  // Create page-specific context
+  const pageContextPrompt = pageContext ? `\n\nCURRENT PAGE CONTEXT: The user is currently viewing Selma's ${pageContext} page. You can provide specific information about this page and suggest related topics they might be interested in.` : '';
   
   // Use a simple, reliable model
   const model = 'microsoft/DialoGPT-medium';
-  const contextPrompt = `${systemPrompt}\n\n${SELMA_BACKGROUND}\n\nAlways be helpful, professional, and accurate. Keep responses concise but informative.\n\nUser: ${message}\nAssistant:`;
+  const contextPrompt = `${systemPrompt}\n\nSELMA'S ACTUAL CV CONTENT:\n${cvContent}\n\n${pageContextPrompt}\n\nAlways be helpful, professional, and accurate. Use ONLY the information provided above about Selma. If you don't know something specific about Selma, direct them to contact her directly or explore her portfolio, YouTube, Replicate, or other platforms for more details. Keep responses concise but informative.\n\nUser: ${message}\nAssistant:`;
   
   console.log(`🤖 Calling Hugging Face model: ${model}`);
   
