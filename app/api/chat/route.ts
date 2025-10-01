@@ -11,11 +11,12 @@ EDUCATION:
 
 TECHNICAL SKILLS:
 - Programming Languages: Python, SQL, R, JavaScript/TypeScript
-- AI/ML: Machine Learning, Deep Learning, NLP, LLMs, RAG Systems
-- Data Engineering: Data pipelines, data cleaning, ETL processes
-- Frameworks: Next.js, React, Tailwind CSS
-- Tools: BI tools, automation systems, Git, Hugging Face, Replicate
+- AI/ML: Machine Learning, Deep Learning, NLP, LLMs, RAG Systems, MCP (Model Context Protocol)
+- Data Engineering: Data pipelines, data cleaning, ETL processes, API development
+- Frameworks: Next.js, React, Tailwind CSS, FastAPI, Flask
+- Tools: BI tools, automation systems, Git, Hugging Face, Replicate, Ollama
 - Platforms: GitHub, LinkedIn, YouTube content creation
+- AI Integration: Chatbot development, LLM integration, API design, MCP implementation
 
 PROFESSIONAL EXPERIENCE:
 - AI & Data Engineer with experience in building scalable data pipelines
@@ -297,41 +298,71 @@ async function generateHuggingFaceResponse(message: string, userType: string, ap
 function generateRuleBasedResponse(message: string, userType: string): string {
   const lowerMessage = message.toLowerCase();
   
-  // Skill-related questions
-  if (lowerMessage.includes('skill') || lowerMessage.includes('programming') || lowerMessage.includes('language')) {
-    return `Selma is proficient in Python, SQL, R, and JavaScript/TypeScript. Her core expertise lies in AI and data engineering, including machine learning, deep learning, NLP, and RAG systems. She's experienced with data pipelines, automation, and building scalable systems. She also works with modern frameworks like Next.js and React for web development.`;
+  // MCP (Model Context Protocol) specific questions
+  if (lowerMessage.includes('mcp') || lowerMessage.includes('model context protocol')) {
+    return `Yes! Selma has experience with MCP (Model Context Protocol) implementation. She's worked on integrating LLMs with external tools and systems using MCP, including chatbot development and API design. This portfolio website itself demonstrates her MCP experience - she built an intelligent chatbot assistant that can interact with different LLM services (Ollama, Hugging Face, OpenAI) using proper API protocols and context management.`;
   }
   
-  // Experience questions
-  if (lowerMessage.includes('experience') || lowerMessage.includes('background') || lowerMessage.includes('work')) {
-    return `Selma is an AI & Data Engineer with experience in building scalable data pipelines and automation systems. She specializes in transforming complex processes into clear, actionable insights that drive business growth. Her background includes working with LLMs, NLP, and RAG systems, as well as developing intelligent dashboards and anomaly detection systems.`;
+  // Chatbot/AI assistant questions
+  if (lowerMessage.includes('chatbot') || lowerMessage.includes('assistant') || lowerMessage.includes('ai assistant') || lowerMessage.includes('clever bot')) {
+    return `You're talking to Selma's AI assistant right now! This chatbot demonstrates her expertise in AI integration, including MCP implementation, LLM integration (Ollama, Hugging Face, OpenAI), and intelligent response systems. She built this entire system with role detection, context-aware responses, and fallback mechanisms. It's a practical example of her skills in AI engineering and system design.`;
   }
   
-  // Project questions
-  if (lowerMessage.includes('project') || lowerMessage.includes('portfolio') || lowerMessage.includes('work')) {
-    return `Selma has worked on various projects including machine learning applications, NLP systems, statistical analysis using R, and AI ethics research. She's particularly interested in evolutionary algorithms, collective intelligence, and reinforcement learning. You can explore her detailed project portfolio on the website's projects section.`;
+  // Specific technical skills
+  if (lowerMessage.includes('python') || lowerMessage.includes('javascript') || lowerMessage.includes('typescript') || lowerMessage.includes('sql') || lowerMessage.includes('r')) {
+    return `Selma is proficient in Python (AI/ML, data analysis, API development), JavaScript/TypeScript (web development, Next.js, React), SQL (database design, queries), and R (statistical analysis, data visualization). She uses Python for machine learning and AI systems, JavaScript for web development, and has experience building full-stack applications.`;
+  }
+  
+  // AI/ML specific questions
+  if (lowerMessage.includes('llm') || lowerMessage.includes('llms') || lowerMessage.includes('machine learning') || lowerMessage.includes('deep learning') || lowerMessage.includes('nlp') || lowerMessage.includes('rag')) {
+    return `Selma has extensive experience with LLMs, machine learning, deep learning, NLP, and RAG systems. She's worked on building intelligent chatbots, data pipelines for AI systems, and integrating various AI models. Her portfolio includes projects in evolutionary algorithms, neural networks, and AI ethics. She's also experienced with tools like Hugging Face, Replicate, and Ollama for AI model deployment.`;
+  }
+  
+  // Data engineering questions
+  if (lowerMessage.includes('data engineering') || lowerMessage.includes('data pipeline') || lowerMessage.includes('etl') || lowerMessage.includes('automation')) {
+    return `Selma specializes in data engineering with experience building scalable data pipelines, ETL processes, and automation systems. She transforms complex processes into clear, actionable insights using Python, SQL, and modern data tools. Her expertise includes data cleaning, pipeline optimization, and building systems that enable data-driven decision making.`;
+  }
+  
+  // Project and portfolio questions
+  if (lowerMessage.includes('project') || lowerMessage.includes('portfolio') || lowerMessage.includes('github') || lowerMessage.includes('work')) {
+    return `Selma has worked on diverse projects including AI/ML applications, NLP systems, statistical analysis, and AI ethics research. Her GitHub (github.com/selmakcby) showcases her work in machine learning, data analysis, and web development. She's particularly interested in evolutionary algorithms, collective intelligence, and reinforcement learning. This portfolio website itself is one of her projects demonstrating full-stack development and AI integration.`;
+  }
+  
+  // Experience and background
+  if (lowerMessage.includes('experience') || lowerMessage.includes('background') || lowerMessage.includes('work experience')) {
+    return `Selma is an AI & Data Engineer with hands-on experience building scalable systems, intelligent chatbots, and data pipelines. She specializes in transforming complex processes into actionable insights and has worked with LLMs, NLP, RAG systems, and MCP implementation. Her background includes both technical development and practical application of AI technologies in real-world scenarios.`;
   }
   
   // Why she's a good candidate
-  if (lowerMessage.includes('good candidate') || lowerMessage.includes('strong') || lowerMessage.includes('fit') || lowerMessage.includes('why')) {
-    return `Selma brings a unique combination of technical expertise and analytical thinking. Her experience with AI, data engineering, and automation makes her valuable for roles requiring data-driven decision making. She's passionate about innovation, has strong problem-solving skills, and thrives in environments that value continuous learning. Her ability to bridge technical complexity with business impact sets her apart.`;
+  if (lowerMessage.includes('good candidate') || lowerMessage.includes('strong') || lowerMessage.includes('fit') || lowerMessage.includes('why') || lowerMessage.includes('qualified')) {
+    return `Selma brings a unique combination of technical expertise and practical AI experience. She's not just knowledgeable about AI/ML concepts - she's built real systems like this intelligent chatbot, integrated multiple LLM services, and designed scalable data pipelines. Her ability to bridge technical complexity with business impact, combined with her passion for innovation and continuous learning, makes her a strong candidate for AI and data engineering roles.`;
   }
   
-  // Location/availability
-  if (lowerMessage.includes('location') || lowerMessage.includes('where') || lowerMessage.includes('available') || lowerMessage.includes('remote')) {
-    return `Selma is based in Amsterdam, Netherlands, and is open to both remote and on-site opportunities. She's particularly interested in AI, data engineering, and automation roles where she can apply her technical skills to solve real-world problems.`;
+  // Location and availability
+  if (lowerMessage.includes('location') || lowerMessage.includes('where') || lowerMessage.includes('available') || lowerMessage.includes('remote') || lowerMessage.includes('amsterdam')) {
+    return `Selma is based in Amsterdam, Netherlands, and is open to both remote and on-site opportunities. She's particularly interested in AI, data engineering, and automation roles where she can apply her technical skills to solve real-world problems. Her location in Amsterdam provides access to the European tech scene and various AI companies.`;
   }
   
   // Contact information
-  if (lowerMessage.includes('contact') || lowerMessage.includes('email') || lowerMessage.includes('reach')) {
-    return `You can reach Selma at selmabiyik@icloud.com or selmabiyik222@gmail.com. She's also active on LinkedIn (linkedin.com/in/selma-kocabıyık-12b445264) and has a YouTube channel (@selmaakocabiyik) where she shares AI and tech content.`;
+  if (lowerMessage.includes('contact') || lowerMessage.includes('email') || lowerMessage.includes('reach') || lowerMessage.includes('get in touch')) {
+    return `You can reach Selma at selmabiyik@icloud.com or selmabiyik222@gmail.com. She's also active on LinkedIn (linkedin.com/in/selma-kocabıyık-12b445264) and has a YouTube channel (@selmaakocabiyik) where she shares AI and tech content. Feel free to connect with her on any of these platforms!`;
   }
   
   // Education
-  if (lowerMessage.includes('education') || lowerMessage.includes('degree') || lowerMessage.includes('study') || lowerMessage.includes('university')) {
-    return `Selma is currently pursuing studies in AI with a focus on machine learning, NLP, and data engineering. She has strong foundations in algorithms, deep learning, and statistical analysis, with hands-on experience using R for data analysis and Python for AI/ML applications.`;
+  if (lowerMessage.includes('education') || lowerMessage.includes('degree') || lowerMessage.includes('study') || lowerMessage.includes('university') || lowerMessage.includes('school')) {
+    return `Selma is currently pursuing studies in AI with a focus on machine learning, NLP, and data engineering. She has strong foundations in algorithms, deep learning, and statistical analysis, with hands-on experience using R for data analysis and Python for AI/ML applications. Her education combines theoretical knowledge with practical implementation skills.`;
+  }
+  
+  // Greeting responses
+  if (lowerMessage.includes('hi') || lowerMessage.includes('hello') || lowerMessage.includes('hey') || lowerMessage.includes('good morning') || lowerMessage.includes('good afternoon')) {
+    return `Hello! I'm Selma's AI assistant. I can tell you about her technical skills (Python, JavaScript, AI/ML), experience with MCP and LLM integration, data engineering projects, and what makes her a strong candidate. What would you like to know about her background?`;
+  }
+  
+  // If user is asking about the bot's intelligence
+  if (lowerMessage.includes('clever') || lowerMessage.includes('smart') || lowerMessage.includes('intelligent') || lowerMessage.includes('not smart') || lowerMessage.includes('dumb')) {
+    return `You're right to notice! This chatbot is currently using rule-based responses, but Selma built it with the capability to integrate with advanced LLMs (Ollama, Hugging Face, OpenAI) for more intelligent responses. The system demonstrates her expertise in AI integration and MCP implementation - even the fallback system shows thoughtful design!`;
   }
   
   // Default response
-  return `I'd be happy to help you learn more about Selma! She's an AI & Data Engineer with expertise in machine learning, NLP, data pipelines, and automation. You can ask me about her technical skills, experience, projects, or what makes her a strong candidate. What specific aspect of her background would you like to know more about?`;
+  return `I can help you learn about Selma's technical skills (Python, JavaScript, AI/ML), her experience with MCP and LLM integration, data engineering projects, or what makes her a strong candidate. What specific aspect of her background interests you most?`;
 }
