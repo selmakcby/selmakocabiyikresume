@@ -312,14 +312,14 @@ async function generateGroqResponse(message: string, userType: string, apiKey: s
         messages: [
           {
             role: 'system',
-            content: `${systemPrompt}\n\n${SELMA_BACKGROUND}\n\nAlways be helpful, professional, and accurate. If you don't know something specific about Selma, say so honestly. Keep responses concise but informative.`
+            content: `${systemPrompt}\n\nSELMA'S ACTUAL CV CONTENT:\n${cvContent}\n\n${pageContextPrompt}\n\nAlways be helpful, professional, and accurate. Use ONLY the information provided above about Selma. If you don't know something specific about Selma, direct them to contact her directly or explore her portfolio, YouTube, Replicate, or other platforms for more details. Keep responses concise but informative.`
           },
           {
             role: 'user',
             content: message
           }
         ],
-        max_tokens: 200,
+        max_tokens: 300,
         temperature: 0.7,
         top_p: 0.9,
         stream: false,
