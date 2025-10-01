@@ -335,7 +335,7 @@ async function generateHuggingFaceResponse(message: string, userType: string, ap
     throw new Error('Unexpected response format from Hugging Face');
     
   } catch (error) {
-    if (error.name === 'AbortError') {
+    if (error instanceof Error && error.name === 'AbortError') {
       console.error(`⏰ Hugging Face timeout after 10 seconds`);
       throw new Error('Hugging Face API timeout');
     }
