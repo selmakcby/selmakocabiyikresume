@@ -46,6 +46,15 @@ export default function Home() {
             <div className="font-medium text-white">Motivation Letter</div>
             <div className="text-sm text-purple-100">General cover letter for applications</div>
           </Link>
+          <a 
+            className="rounded-lg border border-green-200 dark:border-green-800 p-4 hover:bg-green-50 dark:hover:bg-green-900/20 transition" 
+            href="/recommendation-letter.pdf" 
+            target="_blank" 
+            rel="noopener noreferrer"
+          >
+            <div className="font-medium text-green-900 dark:text-green-100">Recommendation Letter</div>
+            <div className="text-sm text-gray-600 dark:text-gray-400">Professional reference & endorsement</div>
+          </a>
         </div>
       </section>
 

@@ -234,3 +234,4 @@ export default function PageChatBot({ isOpen, onClose, pageContext, pageSpecific
     </div>
   );
 }
+
